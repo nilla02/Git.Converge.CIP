@@ -180,6 +180,31 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "FV",
             "dayfilter",
         ],
+        bank:[
+            "First Name",
+            "Last Name",
+            "Status",
+            "Duration",
+            "FV",
+            "dayfilter",
+        ],
+        promoter:[
+            "First Name",
+            "Last Name",
+            "Status",
+            "Duration",
+            "FV",
+            "dayfilter",
+        ],
+
+        clerks:[
+            "First Name",
+            "Last Name",
+            "Status",
+            "Duration",
+            "FV",
+            "dayfilter",
+        ],
         ceo: [
             "First Name",
             "Last Name",

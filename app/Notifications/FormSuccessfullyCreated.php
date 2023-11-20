@@ -29,7 +29,7 @@ class FormSuccessfullyCreated extends Notification implements ShouldQueue
      */
     public function via($notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database', ];
     }
 
     /**

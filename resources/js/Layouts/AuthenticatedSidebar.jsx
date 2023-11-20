@@ -97,6 +97,80 @@ export default function Authenticated({ user }) {
                         </div>
                     </a>
                 ) : null}
+
+                {hasRole("clerks")   ? (
+                    <a
+                        href={route("dashboard")}
+                        active={route().current("dashboard")}
+                        className={`self-stretch h-[50px] hover:bg-cyan-800 p-2.5 rounded-[10px] justify-start items-center gap-2.5 inline-flex ${
+                            route().current("dashboard")
+                                ? "bg-cyan-800 text-white"
+                                  : " text-white hover:text-white"
+
+                        }`}
+                    >
+                        <div className="w-5 h-5 relative">
+                            <div className="w-5 h-5 left-0 top-0 absolute">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="flex-shrink-0 w-6 h-  transition duration-75 hover:text-white "
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="  text-sm font-normal capitalize leading-[23px]">
+                            Home
+                        </div>
+                    </a>
+                ) : null}
+
+                {hasRole("bank")   ? (
+                    <a
+                        href={route("dashboard")}
+                        active={route().current("dashboard")}
+                        className={`self-stretch h-[50px] hover:bg-cyan-800 p-2.5 rounded-[10px] justify-start items-center gap-2.5 inline-flex ${
+                            route().current("dashboard")
+                                ? "bg-cyan-800 text-white"
+                                  : " text-white hover:text-white"
+
+                        }`}
+                    >
+                        <div className="w-5 h-5 relative">
+                            <div className="w-5 h-5 left-0 top-0 absolute">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="flex-shrink-0 w-6 h-  transition duration-75 hover:text-white "
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="  text-sm font-normal capitalize leading-[23px]">
+                            Home
+                        </div>
+                    </a>
+                ) : null}
+
+
                            {
                 hasRole("website_admin")  ? (
                     <a
@@ -468,6 +542,8 @@ export default function Authenticated({ user }) {
                 hasRole("ceo") ||
                 hasRole("promoter") ||
                 hasRole("accountant") ||
+                hasRole("bank") ||
+                hasRole("clerks") ||
                 hasRole("processing") ||
                 hasRole("super_administrators") ? (
                     <a
@@ -684,6 +760,8 @@ export default function Authenticated({ user }) {
                 hasRole("admin_due_diligence_officer") ||
                 hasRole("admin_compliance_officer") ||
                 hasRole("promoter") ||
+                hasRole("bank") ||
+                hasRole("clerks") ||
                 hasRole("corp_sec") ||
                 hasRole("processing") ||
                 hasRole("super_administrators") ? (

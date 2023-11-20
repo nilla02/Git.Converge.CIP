@@ -201,7 +201,7 @@ if (user.role === 'website_admin') {
                 {hasRole('website_admin') && (
             <ResponsiveNavLink href={route('AgencyRegistration')}>Agency Registration</ResponsiveNavLink>
             )}
-            {hasRole('website_admin')||hasRole('ceo')||hasRole('agents')||hasRole('admin_due_diligence_officer')||hasRole('promoter')||hasRole('compliance_officer')||hasRole('admin_compliance_officer') && (
+            {hasRole('website_admin')||hasRole('ceo')||hasRole('agents')||hasRole('clerks')||hasRole('promoter')||hasRole('bank')||hasRole('admin_due_diligence_officer')||hasRole('compliance_officer')||hasRole('admin_compliance_officer') && (
             <ResponsiveNavLink href={route('Draft')}>Submissions</ResponsiveNavLink>
             )}
              {hasRole('website_admin') && (
