@@ -8,18 +8,9 @@ import Echo from 'laravel-echo';
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: process.env.MIX_PUSHER_APP_KEY,
-        cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-        encrypted: true,
-    });
 
-    // Listen for the event
-    echo.channel('form-created').listen('FormSuccessfullyCreatedEvent', (event) => {
-        console.log('Form Successfully Created:', event.message);
-        // Handle the event in your React component
-    });
+
+
 console.log('layout',user)
     return (
         <div className="min-h-screen bg-[#fafafa]">

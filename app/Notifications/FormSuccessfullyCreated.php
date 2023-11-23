@@ -52,7 +52,8 @@ class FormSuccessfullyCreated extends Notification implements ShouldQueue
     public function toArray($notifiable): array
     {
             // Broadcast the event
-            event(new FormSuccessfullyCreatedEvent('The application was successfully created for ' . $this->full_name));
+            FormSuccessfullyCreatedEvent::dispatch($this->full_name);
+            // event(new FormSuccessfullyCreatedEvent('The application was successfully created for ' . $this->full_name));
 
             return [
                 'data' => 'The application was successfully created for ' . $this->full_name,

@@ -13,6 +13,7 @@ use App\Models\Country;
 use App\Models\Region;
 use App\Models\Gender;
 use App\Notifications\FormSuccessfullyCreated;
+use App\Events\FormSuccessfullyCreatedEvent;
 use App\Models\Applicant_Type;
 use App\Models\MaritualStatus;
 use App\Models\Type_of_investment;
@@ -30,6 +31,7 @@ class TestTableController extends Controller
      */
     public function index(Request $request)
     {
+        FormSuccessfullyCreatedEvent::dispatch(["7","1"],'Testing');
         $date=null;
 
 if ($request->days){
@@ -132,7 +134,7 @@ $query->where('created_at','<=',$date);
 
             $notificationCount = auth()->user()->unreadNotifications->count();
         $notifications = auth()->user()->unreadNotifications;
-        return Inertia::render('Forms/Draft', ['users' => $users, 'roles' => $user,'days'=>$daysPassed ,'notifications'=>$notifications,"count"=> $notificationCount]);
+        return Inertia::render('Forms/Draft', ['users' => $users,  'roles' => $user,'days'=>$daysPassed ,'notifications'=>$notifications,"count"=> $notificationCount]);
     }
     public function webadmindb(){
 
@@ -520,6 +522,7 @@ $notifications = auth()->user()->unreadNotifications;
             // Increment the DDO index, looping back to the first user if necessary
             $ddoIndex = ($ddoIndex + 1) % $totalUsers;
             $TestTable->save();
+
         }
 
 
@@ -648,14 +651,17 @@ $notifications = auth()->user()->unreadNotifications;
         }
 
 
-$user = User::find(Auth::user()->id);
+
 
 if ($TestTable->type_of_applicant==="2") {
-    $user->notify(new FormSuccessfullyCreated($TestTable));
+    // $user = User::find(Auth::user()->id);
+    // Auth::user()->notify(new FormSuccessfullyCreated($TestTable));
+    FormSuccessfullyCreatedEvent::dispatch("1");
+    // $user->notify(new FormSuccessfullyCreated($TestTable));
 }
 
-
-return redirect()->route('Draft')->with('', 'value');
+return back()->withInput();
+// return redirect()->route('Draft');
 
     }
 

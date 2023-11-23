@@ -5,6 +5,7 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -13,9 +14,10 @@ use Illuminate\Queue\SerializesModels;
 
 class FormSuccessfullyCreatedEvent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    use Dispatchable, InteractsWithBroadcasting, InteractsWithSockets;
+    // use Dispatchable, InteractsWithSockets, SerializesModels;
     public $message;
+    // public $ids;
 
     /**
      * Create a new event instance.
@@ -23,9 +25,12 @@ class FormSuccessfullyCreatedEvent implements ShouldBroadcast
      * @param  string  $message
      * @return void
      */
-    public function __construct($message)
+    public function __construct($ids, $message)
     {
+        $this->broadcastVia('pusher');
+        $this->ids = $ids;
         $this->message = $message;
+
     }
 
     /**
@@ -35,10 +40,17 @@ class FormSuccessfullyCreatedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('notifications' );
+        $privateChannels = [];
+
+        foreach ($this->ids as $id) {
+            $privateChannels[] = new PrivateChannel('user.' . $id.'.applications');
+        }
+
+        return $privateChannels;
+
     }
-    public function broadcastAs()
-    {
-        return  'notifications';
-    }
+    // public function broadcastAs()
+    // {
+    //     return  'app';
+    // }
 }

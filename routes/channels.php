@@ -16,12 +16,21 @@ use App\Models\User;
 |
 */
 
-Broadcast::channel('notifications.{accId}', function ($user, $accId) {
-    $testTable = TestTable::findOrNew($accId);
-    return $user->id === $testTable->acc_id;
+
+
+Broadcast::channel('user.{id}.applications', function (User $user, int $id) {
+    return $user->id === $id;
 });
 
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
+
+
+
+
+// get all users with risk role -> populate with applications ids (user->assignedAPps by today)
+// agent,consultant,account,risk,ddo
+//  get all users with role with agent
+//  -- get the agent or agents with min applications if more than one agent pick the first one or random
+//  -- consultant
+//  -- account
+//  --  post model create event (assignmetns and broadcast)

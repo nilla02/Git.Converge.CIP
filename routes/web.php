@@ -118,10 +118,6 @@ Route::group(['middleware' => ['role:website_admin|role:super_administrators']],
 Route::get('media/{file}', [MediaController::class, 'serve'])
 ->where(['file'=>'.*'])->middleware(['auth', 'verified']);
 
-Route::get('test', function () {
-    event(new App\Events\FormSuccessfullyCreatedEvent('Someone'));
-    return "Event has been sent!";
-});
 
 
 
