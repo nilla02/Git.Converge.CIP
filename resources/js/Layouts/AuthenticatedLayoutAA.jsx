@@ -31,6 +31,12 @@ const [notificationsx,setNotificationx]=useState(notifications);
 
 
           });
+            const messageChannel = pusher.subscribe('user.' + 7); // Replace 'userId' with the actual user ID
+    messageChannel.bind('message.received', function(data) {
+
+            toast.info(data.message); // Display notification for 'message.received' event
+
+    });
 
 
         function handleResize() {

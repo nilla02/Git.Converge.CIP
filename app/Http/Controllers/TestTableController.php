@@ -20,6 +20,7 @@ use Spatie\Activitylog\Models\Activity;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Pagination\Paginator;
 use Carbon\Carbon;
+use App\Events\MessageReceived;
 
 
 class TestTableController extends Controller
@@ -551,6 +552,9 @@ $notifications = auth()->user()->unreadNotifications;
             // Increment the DDO index, looping back to the first user if necessary
             $accIndex = ($accIndex + 1) % $totalUsers;
             $TestTable->save();
+            $user = User::find($TestTable->acc_id);
+            event(new MessageReceived('Your notification message', $TestTable->acc_id));
+
         }
 
         $ComplianceUsers = User::whereHas('roles', function ($query) {
@@ -651,7 +655,8 @@ if ($TestTable->type_of_applicant==="2") {
 }
 
 
-        return redirect()->route('Draft');
+return redirect()->route('Draft')->with('', 'value');
+
     }
 
     /**

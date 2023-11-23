@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\TestTable;
+use App\Models\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +15,12 @@ use Illuminate\Support\Facades\Broadcast;
 | used to check if an authenticated user can listen to the channel.
 |
 */
+
+Broadcast::channel('notifications.{accId}', function ($user, $accId) {
+    $testTable = TestTable::findOrNew($accId);
+    return $user->id === $testTable->acc_id;
+});
+
 
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
