@@ -260,28 +260,7 @@ export default function FileUpload({
                                 {errors.type_of_investment}
                             </span>
                         </div>
-                        <div className=" mb-4 ">
-                            <InputLabel
-                                htmlFor="First Name"
-                                value="Total Investment Amount"
-                            />
-                            <TextInput
-                                type="text"
-                                className=" block w-full"
-                                label="First Name"
-                                name="First_Name"
-                                value={data.investment_amount}
-                                onChange={(e) =>
-                                    setData("investment_amount", e.target.value)
-                                }
-                                disabled={
-                                    data.type_of_applicant === "1"||  data.type_of_applicant === "3"
-                                }
-                            />
-                            <span className="text-red-600">
-                                {errors.investment_amount}
-                            </span>
-                        </div>
+
 
                         {/* //Number of dependants */}
                         <div className="mb-4 ">
@@ -289,34 +268,17 @@ export default function FileUpload({
                                 htmlFor="Number of dependents"
                                 value="Number of Dependants"
                             />
-                            <select
-                                className="w-full rounded"
-                                value={data.Accompanying_dependents}
-                                onChange={(e) =>
-                                    setData(
-                                        "Accompanying_dependents",
-                                        e.target.value
-                                    )
-                                }
-                                disabled={
-                                    data.type_of_applicant === "1"||  data.type_of_applicant === "3"
-                                }
-                            >
-                                    <option value="">
-                                        -Select Number Of Dependants-
-                                    </option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value=">10">More than 10</option>
-                            </select>
+
+                            <TextInput
+                                        type="text"
+                                        className="mt-1 block w-full"
+                                        label="Accompanying dependents"
+                                        name="Accompanying dependents"
+                                        value={data.Accompanying_dependents}
+                                        onChange={(e) =>
+                                            setData("Accompanying_dependents", e.target.value)
+                                        }
+                                    />
                             <span className="text-red-600">
                                 {errors.Accompanying_dependents}
                             </span>
@@ -586,11 +548,13 @@ export default function FileUpload({
                 <div className="mt-4">
                     <PrimaryButton
                         type="submit"
-                        className="px-6 py-2 font-bold text-white bg-green-500 rounded"
+                        className="px-6 py-2 font-bold text-white bg-slate rounded"
                         onClick={handleSubmit}
                     >
                         Save
                     </PrimaryButton>
+
+
                 </div>
             </form>
         </div>

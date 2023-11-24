@@ -23,6 +23,9 @@ Broadcast::channel('user.{id}.applications', function (User $user, int $id) {
 });
 
 
+Broadcast::channel('user.{id}.granted', function (User $user, int $id) {
+    return $user->id === $id;
+});
 
 
 

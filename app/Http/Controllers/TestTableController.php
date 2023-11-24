@@ -14,6 +14,7 @@ use App\Models\Region;
 use App\Models\Gender;
 use App\Notifications\FormSuccessfullyCreated;
 use App\Events\FormSuccessfullyCreatedEvent;
+use App\Events\StatusChangedEvent;
 use App\Models\Applicant_Type;
 use App\Models\MaritualStatus;
 use App\Models\Type_of_investment;
@@ -31,7 +32,7 @@ class TestTableController extends Controller
      */
     public function index(Request $request)
     {
-        FormSuccessfullyCreatedEvent::dispatch(["7","1"],'Testing');
+        // FormSuccessfullyCreatedEvent::dispatch(["7","1"],'Testing');
         $date=null;
 
 if ($request->days){
@@ -648,15 +649,18 @@ $notifications = auth()->user()->unreadNotifications;
             // Increment the DDO index, looping back to the first user if necessary
             $riskIndex = ($riskIndex + 1) % $totalUsers;
             $TestTable->save();
+
         }
 
 
 
 
 if ($TestTable->type_of_applicant==="2") {
-    // $user = User::find(Auth::user()->id);
-    // Auth::user()->notify(new FormSuccessfullyCreated($TestTable));
-    FormSuccessfullyCreatedEvent::dispatch("1");
+    $user =($TestTable->agent_id);
+
+    FormSuccessfullyCreatedEvent::dispatch([$user],'Testing');
+    $date=null;
+
     // $user->notify(new FormSuccessfullyCreated($TestTable));
 }
 
@@ -1015,7 +1019,104 @@ $risk=Risk_level::all();
 
 
         $submission->update($validated);
+        //Status Update CodeL
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 11) {
 
+            $agent = $submission->agent_id;
+            StatusChangedEvent::dispatch([$agent],'Your Application has been Accepted');
+
+        }
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 17) {
+
+            $agent = $submission->acc_id;
+            $agentco = $submission->co_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent, $agentco ,"1"],$ref_number."Has been submitted by the Autherised Agent");
+
+        }
+
+
+        $newStatus = $validated['accounts_approval'];
+        //Accept
+        if ($newStatus == "yes") {
+
+            $agent = $submission->acc_id;
+            $agentco = $submission->ddo_id;
+            $agentddo = $submission->co_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agentddo, $agentco ,"1"],'Accounts have appraved the application'.$ref_number);
+
+        }
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 2) {
+
+            $agent = $submission->ddo_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent,"1"],$ref_number. "Has been cleared by the Verification officer to");
+
+        }
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 15 || 14) {
+
+            $agent = $submission->ddo_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been withdrawn");
+
+        }
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 5) {
+
+            $agent = $submission->ddo_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Pending board decision");
+
+        }
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 19) {
+
+            $agent = $submission->co_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been returned for Compliance");
+
+        }
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 11) {
+
+
+            $agentddo = $submission->agent_id;
+            $ceo = $submission->agent_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been Granted");
+
+        }
+
+
+        $newStatus = $validated['status_id'];
+        //Accept
+        if ($newStatus == 8) {
+
+
+            $agentddo = $submission->agent_id;
+            $ceo = $submission->agent_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been Denied");
+
+        }
 
        TestTable::where('principle_applicant_id', $id)
                 ->update(['status_id' => $validated['status_id']]);

@@ -50,19 +50,17 @@ const fields = {
             "agents",
             "compliance_officer",
             "due_diligence_officer",
-            "accountant",
             "website_admin",
             "admin_due_diligence_officer",
             "admin_compliance_officer",
             "ceo",
-            "promoter",
             "corp_sec"
         ],
         label: "status",
         field: "select",
         options: [
             { value: 1, label: "Pending Review" },//compliance ddo only
-            { value: 2, label: "Application Assigned" },
+            { value: 2, label: "Verification Complete" },
  { value: 3, label: "Pending Background check" },
             { value: 4, label: "Background check Underway" },///back to draft
             { value:5, label: "Pending Decision" },//compliance

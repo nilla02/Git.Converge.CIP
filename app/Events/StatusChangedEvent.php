@@ -1,7 +1,7 @@
 <?php
-// App\Events\FormSuccessfullyCreatedEvent.php
 
 namespace App\Events;
+
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class FormSuccessfullyCreatedEvent implements ShouldBroadcast
+class StatusChangedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithBroadcasting, InteractsWithSockets;
     // use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -43,7 +43,7 @@ class FormSuccessfullyCreatedEvent implements ShouldBroadcast
         $privateChannels = [];
 
         foreach ($this->ids as $id) {
-            $privateChannels[] = new PrivateChannel('user.' . $id.'.applications');
+            $privateChannels[] = new PrivateChannel('user.' . $id.'.granted');
         }
 
         return $privateChannels;

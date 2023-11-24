@@ -21,16 +21,22 @@ export default function Authenticated({
     useEffect(() => {
         console.log(user.id);
         Echo.private(`user.${user.id}.applications`).listen('FormSuccessfullyCreatedEvent', (e)=> {
-console.log(e)
+            toast.success(`New Form Successfully Created: ${e.message}`);
+
         })
-        //         const pusher = new Pusher("f4fdeadba9dd5edb653f", {
-        //     cluster: "us2",
+        Echo.private(`user.${user.id}.granted`).listen('StatusChangedEvent', (e)=> {
+            toast.success(` ${e.message}`);
+
+        })
+        //         const pusher = new Pusher("9e6455a7ec8937bf5dfe", {
+        //     cluster: "mt1",
         // });
-        // const channel = pusher.subscribe("notifications");
-        // channel.bind("notifications", function (data) {
+        // const channel = pusher.subscribe(`user.${user.id}.applications`);
+        // channel.bind(`user.${user.id}.applications`, function (data) {
         //     console.log(notifications);
         //     try {
-        //         toast.success(data.message); // You can use 'toast.error' for error messages or customize as needed
+        //         const successMessage = `User ID: ${user.id} - ${data.message}`;
+        //         toast.success(successMessage); // You can use 'toast.error' for error messages or customize as needed
         //         setNotificationx([
         //             ...notificationsx,
         //             { data: { data: data.message }, id: crypto.randomUUID() },
@@ -55,7 +61,6 @@ console.log(e)
         }
     }, [screenWidth]);
 
-    console.log(user.roles);
     const hasRole = (roleName) => {
         return user.roles.some((role) => role.name === roleName);
     };
