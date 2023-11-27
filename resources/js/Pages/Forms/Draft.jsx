@@ -122,7 +122,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
         }, [searchQuery, currentPage]);
 
     const columnsByRole = {
-        processing:["id","ref_number","First Name", "Last Name", "Status", "Actions" ,"FV"],
+        processing:["id","ref_number","First Name", "Last Name", "Status", "Actions" ],
         corp_sec:["id","ref_number","First Name", "Last Name", "Status", "Actions"],
         accountant:["id","ref_number","First Name", "Last Name", "Status", "Actions"],
         agents: ["id","ref_number","First Name", "Last Name", "Status", "Actions"],
