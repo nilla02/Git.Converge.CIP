@@ -73,21 +73,24 @@ export default function Edit({ auth, group_models,notifications }) {
               <table className="w-full text-sm text-left text-black ">
                            <thead className="text-xs    uppercase bg-white  text-gray">
                                  <tr>
-                                    <th scope="col" className="px-6 py-3">
-                                        Id
-                                  </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Name
-                                  </th>
-                                  <th scope="col" className="px-6 py-3">
-                                       Email
-                                   </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Roles
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Action
-                                    </th>
+                                 <th scope="col" className="px-6 py-3">
+                                    Id
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                  First Name
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                 Last Name
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                Agency
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                              Liecense
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                      Actions
+                                </th>
                                </tr>
                             </thead>
                            <tbody>
@@ -96,77 +99,20 @@ export default function Edit({ auth, group_models,notifications }) {
                                         className="bg-white border-b  dark:border-gray-700"
                                         key={user.id}
                                     >
-                                        <td className="px-6 py-4">{user.id}</td>
-                                        <td className="px-6 py-4">
-                                            {user.name}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {user.email}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {user.roles.map((role) => (
-                                                <span
-                                                    className={`${
+                                      <td className="px-6 py-4">{user.id}</td>
+                                    <td className="px-6 py-4">
+                                        {user.first_name}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {user.last_name}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {user.Licensee}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {user.Group_name}
+                                    </td>
 
-                                                       role.external_name === "Agent"
-                                                            ? "bg-stone-200 text-stone-600"
-                                                            :role.external_name === "Unverified User"
-                                                            ? "bg-black text-white"
-                                                            :role.external_name ===
-                                                              "Verification Officer"
-                                                            ? "bg-pink-200 text-pink-600"
-                                                            :role.external_name ===
-                                                              "Website Administrator"
-                                                            ? "bg-purple-200 text-purple-600"
-                                                            :role.external_name ===
-                                                              "Accountant"
-                                                            ? "bg-indigo-200 text-indigo-600"
-                                                            :role.external_name ===
-                                                              "admin_compliance_officer"
-                                                            ? "bg-blue-200 text-blue-600"
-                                                            :role.external_name ===
-                                                              "admin_due_diligence_officer"
-                                                            ? "bg-cyan-200 text-cyan-600"
-                                                            :role.external_name ===
-                                                              "Due Diligence Officer"
-                                                            ? "bg-teal-200 text-teal-600"
-                                                            :role.external_name ===
-                                                              "Market & Investor Relations Officer"
-                                                            ? "bg-green-200 text-green-600"
-                                                            :role.external_name ===
-                                                              "Super Administrator"
-                                                            ? "bg-lime-200 text-lime-600"
-                                                            :role.external_name ===
-                                                              "Business Development Officer"
-                                                            ? "bg-yellow-200 text-yellow-600"
-                                                            :role.external_name ===
-                                                              "Chief Operating Officer"
-                                                            ? "bg-amber-200 text-amber-600"
-                                                            :role.external_name ===
-                                                              "Law Enforcement Officer"
-                                                            ? "bg-orange-200 text-orange-600"
-                                                            :role.external_name ===
-                                                              "Promoter"
-                                                            ? "bg-fuchsia-200 text-fuchsia-600"
-                                                            :role.external_name ===
-                                                              "Corporate Secretary"
-                                                            ? "bg-gray-200 text-gray-600"
-                                                            :role.external_name ===
-                                                              "Prime Minister Office"
-                                                            ? "bg-rose-200 text-rose-600"
-                                                            :role.external_name ===
-                                                              "Clerk"
-                                                            ? "bg-emerald-200 text-emerald-600"
-                                                            :role.external_name ===
-                                                            "Risk Assessment Officer"
-                                                            ? "bg-orange-200 text-orange-700"
-                                                            : "bg-yellow-200 text-yellow-700"
-                                                    } py-1 px-3 rounded-full text-xs`}
-                                                >
-                                                    {role.external_name}
-                                                </span>
-                                            ))}
-                                        </td>
                                         <td>
                                             <td className="py-3 px-6">
                                                 <div class="flex item-center">

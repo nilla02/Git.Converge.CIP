@@ -448,28 +448,6 @@ $notifications = auth()->user()->unreadNotifications;
         }
 
 
-        // Move the file to the appropriate folder
-        // if ($request->hasFile('File')) {
-        //     $file = $request->file('File');
-        //     $document_checklist_path = time() . '.' . $file->extension();
-        //     $file->move($userFolder, $document_checklist_path);
-        // } else {
-        //     $document_checklist_path = null;
-        // }
-
-        //     // Create a folder for the user using their ID as the folder name
-        //     $userFolder = storage_path('app/media/'.$userGroup. '/'. $userId .'/'.$tableId);
-        //     if (!file_exists($userFolder)) {
-        //         mkdir($userFolder, 0755, true);
-        //     }
-
-        //     if ($request->hasFile('File')) {
-        //         $file = $request->file('File');
-        //         $document_checklist_path = time() . '.' . $file->extension();
-        //         $file->move($userFolder, $document_checklist_path);
-        //     } else {
-        //         $document_checklist_path = null; // Set the default value or handle it as per your requirement
-        //     }
 
         $userGroup = Auth::user()->group;
         $agentId = Auth::id();
@@ -494,176 +472,64 @@ $notifications = auth()->user()->unreadNotifications;
             "passport_number" => $validatedData['passport_number'],
             "country_of_issue" => $validatedData['country_of_issue'],
         ]);
+
+
+        if($TestTable->type_of_applicant === '2'){
+
         $dueDiligenceUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'due_diligence_officer');
         })->get();
-
-        // Count the number of applications and the number of users
-        $totalApplications = TestTable::count();
-        $totalUsers = $dueDiligenceUsers->count();
-
-        // Retrieve all TestTable records
-        $testTables = TestTable::all();
-
-        // Initialize an index to keep track of the current DDO user
-        $ddoIndex = 0;
-
-        // Assign DDOs to each application sequentially
-        foreach ($testTables as $TestTable) {
-            // Check if the 'ddo_id' field is already populated
-            if (empty($TestTable->ddo_id&& $TestTable->principle_applicant_id === "2")) {
-                // Get the current DDO user
-                $ddoUser = $dueDiligenceUsers[$ddoIndex];
-
-                // Assign the DDO's user ID to the application's ddo_id field
-                $TestTable->ddo_id = $ddoUser->id;
-
-            }
-
-            // Increment the DDO index, looping back to the first user if necessary
-            $ddoIndex = ($ddoIndex + 1) % $totalUsers;
-            $TestTable->save();
-
-        }
+        $ddo_to_sign = $dueDiligenceUsers->sortBy(function ($user) {
+            return $user->today_app_count;
+        })->first();
 
 
         $AccountsUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'accountant');
         })->get();
 
-        // Count the number of applications and the number of users
-        $totalApplications = TestTable::count();
-        $totalUsers = $AccountsUsers ->count();
+        $acc_to_sign = $AccountsUsers->sortBy(function ($user) {
+            return $user->today_app_count;
+        })->first();
 
-        // Retrieve all TestTable records
-        $testTables = TestTable::all();
-
-        // Initialize an index to keep track of the current DDO user
-        $accIndex = 0;
-
-        // Assign DDOs to each application sequentially
-        foreach ($testTables as $TestTable) {
-            // Check if the 'ddo_id' field is already populated
-            if (empty($TestTable->acc_id&& $TestTable->principle_applicant_id === "2")) {
-                // Get the current DDO user
-                $accUser = $AccountsUsers[$accIndex];
-
-                // Assign the DDO's user ID to the application's ddo_id field
-                $TestTable->acc_id = $accUser->id;
-
-            }
-
-            // Increment the DDO index, looping back to the first user if necessary
-            $accIndex = ($accIndex + 1) % $totalUsers;
-            $TestTable->save();
-            $user = User::find($TestTable->acc_id);
-            event(new MessageReceived('Your notification message', $TestTable->acc_id));
-
-        }
 
         $ComplianceUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'compliance_officer');
         })->get();
 
-        // Count the number of applications and the number of users
-        $totalApplications = TestTable::count();
-        $totalUsers = $ComplianceUsers ->count();
+        $co_to_sign = $ComplianceUsers->sortBy(function ($user) {
+            return $user->today_app_count;
+        })->first();
 
-        // Retrieve all TestTable records
-        $testTables = TestTable::all();
 
-        // Initialize an index to keep track of the current DDO user
-        $coIndex = 0;
-
-        // Assign DDOs to each application sequentially
-        foreach ($testTables as $TestTable) {
-            // Check if the 'ddo_id' field is already populated
-            if (empty($TestTable->co_id&& $TestTable->principle_applicant_id === "2")) {
-                // Get the current DDO user
-                $coUser = $ComplianceUsers[$coIndex];
-
-                // Assign the DDO's user ID to the application's ddo_id field
-                $TestTable->co_id = $coUser->id;
-                $TestTable->save();
-            }
-
-            // Increment the DDO index, looping back to the first user if necessary
-            $coIndex = ($coIndex + 1) % $totalUsers;
-        }
-
-        $CoUsers = User::whereHas('roles', function ($query) {
+        $ceoUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'ceo');
         })->get();
 
-        // Count the number of applications and the number of users
-        $totalApplications = TestTable::count();
-        $totalUsers = $CoUsers ->count();
+        $ceo_to_sign = $ceoUsers->sortBy(function ($user) {
+            return $user->today_app_count;
+        })->first();
 
-        // Retrieve all TestTable records
-        $testTables = TestTable::all();
 
-        // Initialize an index to keep track of the current DDO user
-        $ceoIndex = 0;
-
-        // Assign DDOs to each application sequentially
-        foreach ($testTables as $TestTable) {
-            // Check if the 'ddo_id' field is already populated
-            if (empty($TestTable->ceo_id&& $TestTable->principle_applicant_id === "2")) {
-                // Get the current DDO user
-                $ceoUser = $CoUsers[$ceoIndex];
-
-                // Assign the DDO's user ID to the application's ddo_id field
-                $TestTable->ceo_id = $ceoUser->id;
-                $TestTable->save();
-            }
-
-            // Increment the DDO index, looping back to the first user if necessary
-            $ceoIndex = ($ceoIndex + 1) % $totalUsers;
-        }
-        $RiskUsers = User::whereHas('roles', function ($query) {
+        $riskUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'risk_assessment_officer');
         })->get();
 
-        // Count the number of applications and the number of users
-        $totalApplications = TestTable::count();
-        $totalUsers = $RiskUsers ->count();
+        $risk_to_sign = $riskUsers->sortBy(function ($user) {
+            return $user->today_app_count;
+        })->first();
 
-        // Retrieve all TestTable records
-        $testTables = TestTable::all();
-
-        // Initialize an index to keep track of the current DDO user
-        $riskIndex = 0;
-
-        // Assign DDOs to each application sequentially
-        foreach ($testTables as $TestTable) {
-            // Check if the 'ddo_id' field is already populated
-            if (empty($TestTable->risk_id&& $TestTable->principle_applicant_id === "2")) {
-                // Get the current DDO user
-                $riskUser = $RiskUsers[$riskIndex];
-
-                // Assign the DDO's user ID to the application's ddo_id field
-                $TestTable->risk_id = $riskUser->id;
-
-            }
-
-            // Increment the DDO index, looping back to the first user if necessary
-            $riskIndex = ($riskIndex + 1) % $totalUsers;
-            $TestTable->save();
-            $user = User::find(Auth::user()->id);
-            $user->notify(new phase1($TestTable));
-        }
+        $TestTable->ddo_id = $ddo_to_sign->id;
+        $TestTable->ceo_id = $ceo_to_sign->id;
+        $TestTable->co_id = $co_to_sign->id;
+        $TestTable->acc_id = $acc_to_sign->id;
+        $TestTable->risk_id = $risk_to_sign->id;
 
 
-
-
-if ($TestTable->type_of_applicant==="2") {
-    $user =($TestTable->agent_id);
-
-    FormSuccessfullyCreatedEvent::dispatch([$user],'Testing');
-
-}
-
-
+        $TestTable->save();
+        FormSuccessfullyCreatedEvent::dispatch([$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id,Auth::id()], 'Testing');
+        Auth::user()->notify(new phase1($TestTable));
+    }
 
 
 return back()->withInput();

@@ -82,9 +82,11 @@ fetch('/notification-count')
         return response.json();
     })
     .then(data => {
+        console.log("notifications",data);
         const notificationCount = data.count;
         // Update your UI with the notification count, for example, update the red dot
         updateNotificationCount(notificationCount);
+
     })
     .catch(error => {
         console.error('Error fetching notification count:', error);
@@ -92,7 +94,8 @@ fetch('/notification-count')
     });
 
     const updateNotificationCount = (count) => {
-        const notificationCountElement = document.getElementById('notification-count');
+        if (!count)return
+        const notificationCountElement = document.querySelector('.notification-count');
         notificationCountElement.textContent = count;
 
         if (count > 0) {

@@ -15,11 +15,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = auth()->user()->unreadNotifications;
 
-        return inertia::render('Dashboard', [
-            'notifications' => $notifications,
-        ]);
     }
 
 
@@ -50,7 +46,10 @@ class NotificationController extends Controller
         $user = User::find(Auth::user()->id);
         $notificationCount = $user->unreadNotifications->count();
 
-   
+        return response()->json([
+            'count' => $notificationCount,
+        ]);
+
     }
 
     public function create()

@@ -12,6 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use App\Models\TestTable;
+use Carbon\Carbon;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable,HasRoles,LogsActivity;
@@ -74,10 +75,20 @@ class User extends Authenticatable
     //     return $this->belongsTo(Role::class, 'role_id');
     // }
 
-     protected $appends = ['role_names'];
+     protected $appends = ['role_names','today_app_count'];
     protected function getRoleNamesAttribute($value)
     {
         return $this->getRoleNames()->toArray();
     }
-
+    protected function getTodayAppCountAttribute($value)
+    {
+        return Testtable::whereDate('created_at', Carbon::today())->where(function($query){
+            $query->whereOr('agent_id', $this->id)
+            ->orWhere('ddo_id', $this->id)
+            ->orWhere('acc_id', $this->id)
+            ->orWhere('co_id', $this->id)
+            ->orWhere('ceo_id', $this->id)
+            ->orWhere('risk_id', $this->id);
+        })->count();
+    }
 }

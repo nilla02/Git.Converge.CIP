@@ -13,7 +13,7 @@ export default function UpdateProfileInformation({ user ,roles,auth,notification
         email: user.email,
         roles: user.roles.map((role) => role.name),
     });
-
+console.log("User",user.today_app_count)
     const submit = (e) => {
         e.preventDefault();
         put(route("user.update", user.id));
