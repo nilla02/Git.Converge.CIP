@@ -29,7 +29,7 @@ export default function UpdateProfileInformation({ user ,roles,auth,notification
                 {/* ... (header content) */}
             </header>
 
-            <main className="container mx-auto  m-20 py-8 lg:w-3/4 xl:w-2/3">
+            <main className="py-12  lg:ml-[235px]  sm:ml-[235px]  sm:px-6 lg:px-8">
 
               <section className="mb-8">
 

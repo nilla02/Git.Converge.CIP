@@ -1,43 +1,89 @@
+
 import AuthenticatedLayoutAA from "@/Layouts/AuthenticatedLayoutAA";
-import Footer from "@/Components/Footer";
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
-export default function Edit({ auth, users, groups,notifications }) {
-    return (
-        <AuthenticatedLayoutAA user={auth.user}
-        notifications={notifications}>
-            <Authenticated user={auth.user} />
+import PrimaryButton from "@/Components/PrimaryButton";
+import { useState, useEffect } from "react";
+import ReactPaginate from 'react-paginate';
 
-            {/* Header */}
-            <header className="bg-cyan-200 text-white py-4">
-                {/* ... (header content) */}
-            </header>
+export default function Edit({ auth, users, groups,notifications}) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const usersPerPage = 20;
 
-            {/* Main Content */}
-            <div className="py-12">
-                <div className="lg:ml-[235px] sm:px-6 lg:px-8">
-                    <div className=" overflow-hidden shadow-sm sm:rounded-lg">
-                        <table className="w-full text-sm text-left text-black ">
-                            <thead className="text-xs    uppercase bg-cyan-600 dark:bg-gray-700 text-white">
-                                <tr>
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setCurrentPage(0);
+  };
+
+  useEffect(() => {
+
+    const startIndex = currentPage * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    const filtered = users
+
+      .filter(
+        (user) =>
+          user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.group.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase())
+        // Add more filters for other columns if needed
+      )
+      .slice(startIndex, endIndex);
+
+    setFilteredUsers(filtered);
+  }, [searchQuery, currentPage]);
+
+  return (
+    <AuthenticatedLayoutAA user={auth.user} notifications={notifications}>
+      <Authenticated user={auth.user} />
+      <header className="bg-gray-900 text-white py-4">{/* ... (header content) */}</header>
+
+      <div className="py-12">
+        <div className="lg:ml-[235px] sm:ml-[235px] sm:px-6 lg:px-8">
+          <div className="overflow-hidden shadow-sm sm:rounded-lg">
+            <section className="">
+              <div className="flex bg-cyan-700 to-[#405160] p-3 rounded">
+                <div className="flex-1 pt-2">
+                  <h1 className="text-bold text-white">User Table</h1>
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="px-4 py-2 border rounded-lg"
+                />
+        
+              </div>
+
+              <table className="w-full text-sm text-left text-black ">
+                           <thead className="text-xs    uppercase bg-white  text-gray">
+                                 <tr>
                                     <th scope="col" className="px-6 py-3">
                                         Id
-                                    </th>
+                                  </th>
                                     <th scope="col" className="px-6 py-3">
                                         Name
-                                    </th>
-                                    <th scope="col" className="px-6 py-3">
-                                        Email
-                                    </th>
+                                  </th>
+                                  <th scope="col" className="px-6 py-3">
+                                       Email
+                                   </th>
                                     <th scope="col" className="px-6 py-3">
                                         Roles
                                     </th>
                                     <th scope="col" className="px-6 py-3">
                                         Action
                                     </th>
-                                </tr>
+                               </tr>
                             </thead>
-                            <tbody>
-                                {users.map((user) => (
+                           <tbody>
+                               {filteredUsers.map((user) => (
                                     <tr
                                         className="bg-white border-b  dark:border-gray-700"
                                         key={user.id}
@@ -179,12 +225,20 @@ export default function Edit({ auth, users, groups,notifications }) {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
+              <ReactPaginate
+                pageCount={Math.ceil(users.length / usersPerPage)}
+                pageRangeDisplayed={5}
+                marginPagesDisplayed={2}
+                onPageChange={handlePageChange}
+                containerClassName="pagination flex gap-2 items-center"
+                activeClassName="active"
+              />
+            </section>
+          </div>
+        </div>
+      </div>
 
-            {/* Footer */}
 
-        </AuthenticatedLayoutAA>
-    );
+    </AuthenticatedLayoutAA>
+  );
 }

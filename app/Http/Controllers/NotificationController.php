@@ -23,12 +23,24 @@ class NotificationController extends Controller
     }
 
 
-    public function markAsRead(Request $request)
+    public function markAsRead(Request $request, $notification)
     {
-        Auth::user()->unreadNotifications->where('id', $request->notification_id)->markAsRead();
+        // Assuming your notification model is named Notification
+        $user = Auth::user(); // Get the authenticated user
 
-        return response()->json(['message' => 'Notifications marked as read']);
+        // Find the notification by ID related to the authenticated user
+        $notification = $user->notifications()->find($notification);
+
+        if ($notification) {
+            // Mark the notification as read by updating the 'read_at' timestamp
+            $notification->markAsRead();
+
+            // Additional logic if needed...
+        }
+
+        // Redirect back or return a response as needed
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -38,10 +50,7 @@ class NotificationController extends Controller
         $user = User::find(Auth::user()->id);
         $notificationCount = $user->unreadNotifications->count();
 
-        return Inertia::render('Draft','WebAdministrator', [
-            'notificationCount' => $notificationCount,
-            // Other data you want to pass to the Inertia view
-        ]);
+   
     }
 
     public function create()

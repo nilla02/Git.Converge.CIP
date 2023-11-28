@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Models\Country;
 use App\Models\Region;
 use App\Models\Gender;
-use App\Notifications\FormSuccessfullyCreated;
+use App\Notifications\phase1;
 use App\Events\FormSuccessfullyCreatedEvent;
 use App\Events\StatusChangedEvent;
 use App\Models\Applicant_Type;
@@ -649,7 +649,8 @@ $notifications = auth()->user()->unreadNotifications;
             // Increment the DDO index, looping back to the first user if necessary
             $riskIndex = ($riskIndex + 1) % $totalUsers;
             $TestTable->save();
-
+            $user = User::find(Auth::user()->id);
+            $user->notify(new phase1($TestTable));
         }
 
 
@@ -659,10 +660,11 @@ if ($TestTable->type_of_applicant==="2") {
     $user =($TestTable->agent_id);
 
     FormSuccessfullyCreatedEvent::dispatch([$user],'Testing');
-    $date=null;
 
-    // $user->notify(new FormSuccessfullyCreated($TestTable));
 }
+
+
+
 
 return back()->withInput();
 // return redirect()->route('Draft');
@@ -691,6 +693,7 @@ $risk=Risk_level::all();
 
 
         $submission = TestTable::findOrFail($id);
+
         $notifications = auth()->user()->unreadNotifications;
         return Inertia::render('Submissions/EditCommissions', ['submission' => $submission,'notifications'=>$notifications]);
     }

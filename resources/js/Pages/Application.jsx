@@ -26,7 +26,7 @@ export default function Edit({
 
             {/* Main Content */}
             <div className="py-12">
-                <div className="lg:ml-[235px] sm:px-6 lg:px-8">
+                <div className="lg:ml-[235px] sm:ml-[235px] sm:px-6 lg:px-8">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="  relative overflow-x-auto p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <FileUpload

@@ -16,7 +16,7 @@ export default function AgencyReg({ auth, users, groups,notifications }) {
 
             {/* Main Content */}
             <div className="py-12">
-                <div className="lg:ml-[235px] sm:px-6 lg:px-8">
+                <div className="lg:ml-[235px]  sm:ml-[235px] sm:px-6 lg:px-8">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
                         <GroupUpload />
                     </div>

@@ -13,8 +13,13 @@ export default function Authenticated({
     children,
     notifications,
 }) {
-    console.log(notifications);
+
     const [notificationsx, setNotificationx] = useState(notifications);
+    const [readNotifications, setReadNotifications] = useState([]);
+    const [notificationCount, setNotificationCount] = useState(
+        notificationsx.length - readNotifications.length
+    );
+    console.log(notificationsx);
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(true);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -28,23 +33,7 @@ export default function Authenticated({
             toast.success(` ${e.message}`);
 
         })
-        //         const pusher = new Pusher("9e6455a7ec8937bf5dfe", {
-        //     cluster: "mt1",
-        // });
-        // const channel = pusher.subscribe(`user.${user.id}.applications`);
-        // channel.bind(`user.${user.id}.applications`, function (data) {
-        //     console.log(notifications);
-        //     try {
-        //         const successMessage = `User ID: ${user.id} - ${data.message}`;
-        //         toast.success(successMessage); // You can use 'toast.error' for error messages or customize as needed
-        //         setNotificationx([
-        //             ...notificationsx,
-        //             { data: { data: data.message }, id: crypto.randomUUID() },
-        //         ]);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // });
+
 
         function handleResize() {
             setScreenWidth(window.innerWidth);
@@ -60,6 +49,58 @@ export default function Authenticated({
             setShowingNavigationDropdown(false);
         }
     }, [screenWidth]);
+
+    const markAsRead = (notificationId) => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch(`/mark-as-read/${notificationId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            // Include a body if your route expects one
+            // body: JSON.stringify({ /* your data */ }),
+
+        })
+        .then(response => {
+            // Handle the response as needed
+            console.log('Notification marked as read');
+            console.log(notificationId);
+        })
+        .catch(error => {
+            console.error('Error marking notification as read:', error);
+        });
+    };
+
+// Make a fetch request from your frontend
+fetch('/notification-count')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const notificationCount = data.count;
+        // Update your UI with the notification count, for example, update the red dot
+        updateNotificationCount(notificationCount);
+    })
+    .catch(error => {
+        console.error('Error fetching notification count:', error);
+        console.log(notificationCount);
+    });
+
+    const updateNotificationCount = (count) => {
+        const notificationCountElement = document.getElementById('notification-count');
+        notificationCountElement.textContent = count;
+
+        if (count > 0) {
+            notificationCountElement.classList.remove('hidden');
+        } else {
+            notificationCountElement.classList.add('hidden');
+        }
+    };
 
     const hasRole = (roleName) => {
         return user.roles.some((role) => role.name === roleName);
@@ -90,6 +131,7 @@ export default function Authenticated({
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
                             <Dropdown>
                                 <Dropdown.Trigger>
+
                                     <div>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -105,23 +147,28 @@ export default function Authenticated({
                                                 d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                                             />
                                         </svg>
+                                        {notificationCount > 0 && (
+                    <div className="notification-count">{notificationCount}</div>
+                )}
                                     </div>
                                 </Dropdown.Trigger>
 
                                 <Dropdown.Content>
-                                    <Dropdown.Link href={route("Draft")}>
-                                        {notificationsx.map((notification) => (
-                                            <li key={notification.id}>
-                                                {notification.data.data}
-                                            </li>
-                                        ))}
-                                    </Dropdown.Link>
-                                    <Dropdown.Link
-                                        href="#"
-                                        className="btn btn-success btn-sm"
-                                    >
-                                        Mark All as Read
-                                    </Dropdown.Link>
+                                {notifications.map((notification) => (
+                                    <Dropdown.Link key={notification.id}>
+    <button
+        className="notification-button"
+        onClick={() => markAsRead(notification.id)}
+    >
+        {notification.data.data}
+    </button>
+</Dropdown.Link>
+    ))}
+    {notifications.length > 0 && (
+        <Dropdown.Link href="#" className="btn btn-success btn-sm">
+            Mark All as Read
+        </Dropdown.Link>
+    )}
                                 </Dropdown.Content>
                             </Dropdown>{" "}
                             <div className="ml-3 relative">

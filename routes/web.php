@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TestTableTwoController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +45,7 @@ Route::put('/user/{id}/edit', [UserController::class, 'update'])->name('user.upd
 Route::get('/user/{id}/edit', [UserController::class, 'show'])->name('user.show');
 
 
+Route::post('/mark-as-read/{notification}',[NotificationController::class,'markAsRead'])->name('markAsRead');
 
 
 
@@ -53,7 +55,7 @@ Route::post('/form-table-two/store', [TestTableTwoController::class, 'store'])->
 Route::post('/activity_log/store', [ActivityLogController::class, 'store'])->name('activity_log.store');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
-
+Route::get('/notification-count', [NotificationController::class, 'getNotificationCount'])->name('getNotificationCount');
 
 
 Route::middleware('auth')->group(function () {
@@ -93,14 +95,14 @@ Route::get('/dashboard', [TestTableController::class, 'index2'], function () {
 Route::get('/Forms', [UserController::class, 'index'], function () {
 })->middleware(['auth', 'verified'])->name('Forms');
 //ends
-
+Route::get('/Application/Forms', function () {
+    return Inertia::render('SLForm');
+})->name('SLform');
 //agent
 Route::group(['middleware' => ['role:agents|website_admin']], function () {
     Route::get('/dashboard/application',  [TestTableController::class, 'create'])->middleware(['auth', 'verified'])->name('application.create');
     //forms
-    Route::get('/Application/Forms', function () {
-        return Inertia::render('SLForm');
-    })->middleware(['auth', 'verified'])->name('SLform');
+
 });
 //Web admin Super Admin routes
 Route::group(['middleware' => ['role:website_admin|role:super_administrators']], function () {

@@ -247,7 +247,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             {/* Main Content */}
 
             <div className="py-12">
-                <div className="lg:ml-[235px] sm:px-6 lg:px-8">
+                <div className="lg:ml-[235px]  sm:ml-[235px] sm:px-6 lg:px-8">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
 
                             <section className="">

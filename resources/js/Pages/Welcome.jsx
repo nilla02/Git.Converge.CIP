@@ -1,11 +1,11 @@
 import { Link, Head } from "@inertiajs/react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
+import ApplicationLogo from "@/Components/ApplicationLogo"; 
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     return (
         <>
             <Head title="Welcome" />
-            <div className={`relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-[url('/bg2.jpg')] bg-no-repeat bg-cover selection:bg-red-500 selection:text-white`}>
+            <div className={`relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-[url('/bg3.jpg')] bg-no-repeat bg-cover selection:bg-red-500 selection:text-white`}>
                 <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
                     {auth.user ? (
                         <Link
@@ -48,7 +48,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     <div className="mt-16">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
                             <a
-                                href={route("Forms")}
+                                href={route("SLform")}
                                 className="scale-100 p-6 bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500"
                             >
                                 <div>

@@ -13,10 +13,12 @@ class phase1 extends Notification
 
     /**
      * Create a new notification instance.
-     */
-    public function __construct()
+     */ protected $application,$full_name;
+
+    public function __construct($application)
     {
-        //
+        $this->application = $application;
+        $this->full_name = $this->application->first_name.' '.$this->application->first_name;
     }
 
     /**
@@ -24,9 +26,9 @@ class phase1 extends Notification
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
+    public function via($notifiable): array
     {
-        return ['mail'];
+        return ['database', ];
     }
 
     /**
@@ -35,9 +37,10 @@ class phase1 extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->greeting('Hello,')
+            ->line('The you have successfully created a new application for '.$this->full_name)
+            ->action('View dashboard', url('/home'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -45,10 +48,10 @@ class phase1 extends Notification
      *
      * @return array<string, mixed>
      */
-    public function toArray(object $notifiable): array
+    public function toArray($notifiable): array
     {
-        return [
-            //
+            return [
+                'data' => 'The application was successfully created for ' . $this->full_name,
         ];
     }
 }

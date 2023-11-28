@@ -48,8 +48,8 @@ export default function Dashboard({
                     <div class="lg:grid  lg:grid-cols-4  lg:gap-4 sm:grid  sm:grid-cols-1  sm:gap-4">
                         {/* cardbox1 */}
                         <div class=" ">
-                            <div className="flex flex-wrap">
-                                <div className="lg:w-[400px] sm:w-full shadow-xl bg-opacity-30 bg-white overflow-hidden flex flex-col">
+                            <div className="lg:flex lg:flex-wrap">
+                                <div className="lg:w-[400px] sm:w-full md:w-full shadow-xl bg-opacity-30 bg-white overflow-hidden flex flex-col">
                                     <div className="p-5 flex items-center space-x-4">
                                         <div>
                                             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-600 text-white">
@@ -86,7 +86,7 @@ export default function Dashboard({
                         {/* cardbox2 */}
 
                         <div class=" ">
-                            <div className="flex flex-wrap">
+                            <div className="lg:flex lg:flex-wrap">
                                 <div className="lg:w-[400px] sm:w-full shadow-xl sm bg-opacity-30 bg-white overflow-hidden flex flex-col">
                                     <div class="p-5 flex items-center space-x-4">
                                         <div>
@@ -116,7 +116,7 @@ export default function Dashboard({
                         </div>
                         {/* cardbox3 */}
                         <div class=" ">
-                            <div className="flex flex-wrap">
+                            <div className="lg:flex lg:flex-wrap">
                                 <div className="lg:w-[400px] sm:w-full shadow-xl bg-opacity-30 bg-white overflow-hidden flex flex-col">
                                     <div className="p-5 flex items-center space-x-4">
                                         <div>
@@ -152,7 +152,7 @@ export default function Dashboard({
                             <div></div>
                         </div>
                         {/* cardbox 4 */}
-                        <div className="flex flex-wrap">
+                        <div className="lg:flex lg:flex-wrap">
                             <div className="lg:w-[400px] sm:w-full bg-opacity-30 bg-white shadow-xl overflow-hidden flex flex-col">
                                 <div class="p-5 flex items-center space-x-4">
                                     <div>
@@ -295,7 +295,7 @@ export default function Dashboard({
                             </div>
                         </div>
                         {/* piecehart */}
-                        <div class="flex  justify-center rounded bg-opacity-30 bg-white shadow-xl sm:rounded-lg ">
+                        <div class="flex  justify-center rounded bg-opacity-30 bg-white shadow-xl sm:rounded-lg sm:h-100">
                             <Convension
                                 agents={agents}
                                 ddo={ddo}
