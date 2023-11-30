@@ -20,7 +20,7 @@ class CreateTestTablesTable extends Migration
             $table->text('Region')->nullable();
             $table->text('country_of_birth')->nullable();
  $table->text('country_of_issue')->nullable();
-            $table->text('payment_amount')->nullable();
+            $table->integer('payment_amount')->nullable();
             $table->text('passport_number')->nullable();
             $table->text('visa_Number')->nullable();
             $table->date('visa_issue_date')->nullable();

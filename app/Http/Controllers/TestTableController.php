@@ -315,11 +315,11 @@ if ($start_date && $end_date){
             return $user->source_of_funds_path !== null;
         })->count();
 
-        $paid = $users->sum('amount_paid');
+        $paid = $users->sum('payment_amount');
 
 $total=$users->count();
 $notifications = auth()->user()->unreadNotifications;
-        return Inertia::render('Report', ['users' => $users,'data'=>$data,'count'=>$count,'total'=>$total,'notifications'=>$notifications]);
+        return Inertia::render('Report', ['users' => $users,'data'=>$data,'count'=>$count,'total'=>$total,'notifications'=>$notifications,'paid'=>$paid]);
     }
 
     public function index2()
@@ -761,7 +761,7 @@ $risk=Risk_level::all();
             'accounts_approval'=>'nullable',
             'co_notes' => 'nullable',
             'risk_level'=>'nullable',
-            'Payment_Amount' => 'nullable',
+            'payment_amount' => 'nullable',
             'Date_Of_Payment' => 'nullable',
             'Assigned_DDO' => 'nullable',
             'Assigned_Compliance' => 'nullable',
@@ -905,7 +905,10 @@ $risk=Risk_level::all();
             $agent = $submission->acc_id;
             $agentco = $submission->co_id;
             $ref_number = $submission->ref_number;
+            logger("Before dispatching StatusChangedEvent");
             StatusChangedEvent::dispatch([$agent, $agentco ,"1"],$ref_number."Has been submitted by the Autherised Agent");
+    logger("After dispatching StatusChangedEvent");
+
 
         }
 

@@ -11,7 +11,7 @@ import Footer from "@/Components/Footer";
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
 import PieChart from "@/Components/Charts/PieChart";
 
-export default function report({ auth, mustVerifyEmail, status, users, data,count,total, }) {
+export default function report({ auth, mustVerifyEmail, status, users, data,count,total, notifications,paid }) {
     const [activeTab, setActiveTab] = useState(0);
 
     const tabTitles = [
@@ -221,7 +221,7 @@ document.getElementById(key).value=value
                                                                           Investment Total
                                                                         </div>
                                                                         <div className="text-2xl font-bold font text-gray-900">
-                                                                            {}
+                                                                            ${paid}
                                                                         </div>
                                                                     </div>
                                                                 </div>

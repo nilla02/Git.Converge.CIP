@@ -26,14 +26,7 @@ const ceodashboard = ({users}) => {
             </div>
         </div>
     </div>
-    <a
-                            href="#"
 
-                        >
-    <div className="text-white text-[21px] p-1 bg-cyan-600 font-bold leading-tight text-center">
-        View More
-    </div>
-    </a>
 </div>
 </div>
                     </div>
@@ -56,14 +49,7 @@ const ceodashboard = ({users}) => {
             </div>
         </div>
     </div>
-    <a
-                            href="#"
 
-                        >
-    <div className="text-white text-[21px] p-1 bg-cyan-600 font-bold leading-tight text-center">
-        View More
-    </div>
-    </a>
 </div>
 </div>
                     </div>
@@ -86,21 +72,14 @@ const ceodashboard = ({users}) => {
             </div>
         </div>
     </div>
-    <a
-                            href="#"
 
-                        >
-    <div className="text-white text-[21px] p-1 bg-cyan-600 font-bold leading-tight text-center">
-        View More
-    </div>
-    </a>
 </div>
 </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-4  mt-[60px] h-[150px]">
                     <div class="flex items-center justify-center rounded bg-opacity-100 bg-white shadow sm:rounded-lg ">
-                        Overview of how many application are in what stage of the process in total
+
                         <PieChart users={users} />
                     </div>
                     <div class="flex-1 items-center justify-center rounded bg-opacity-100 bg-white shadow sm:rounded-lg">

@@ -159,6 +159,12 @@ const fields = {
         field: "select_2",
 
     },
+    payment_amount:{
+        roles: ["accountant","website_admin"],
+        label: "Total payment receive",
+        field: "input",
+        type: "text",
+    },
     law_enforcement_sent:
     {
         roles:["due_diligence_officer","website_admin","ceo"],

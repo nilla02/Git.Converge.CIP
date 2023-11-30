@@ -103,7 +103,7 @@ protected $appends = ['status','day_passed'];
     'acc_id',
     'risk_id',
  'risk_level',
-    'Payment_Amount',
+    'payment_amount',
     'Date_Of_Payment',
     'Region',
     'Gender',

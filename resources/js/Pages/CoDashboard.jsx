@@ -26,19 +26,7 @@ export default function Dashboard({ auth, users, updated, notifications }) {
       handleTabClick(0);
     }, []);
 
-    const Draft = users.filter((user) => user.status_id === "Draft");
-    const draft = Draft.length;
-
-    const Pre_Processing = users.filter(
-        (user) => user.status_id === "Pre-Processing"
-    );
-    const pre_processing = Pre_Processing.length;
-
-    const Approved = users.filter((user) => user.status_id === "Approved");
-    const approved = Approved.length;
-
-    const Denied = users.filter((user) => user.status_id === "Denied");
-    const denied = Denied.length;
+   
     return (
         <AuthenticatedLayoutAA user={auth.user}
         notifications={notifications}>
@@ -48,7 +36,7 @@ export default function Dashboard({ auth, users, updated, notifications }) {
             </header>
 
             <div className="py-12">
-                <div className="lg:ml-[235px] sm:px-6 lg:px-8">
+                <div className="lg:ml-[235px] sm:ml-[235px] sm:px-6 lg:px-8">
                 <ul className="flex flex-wrap  bg-cyan-600 rounded-lg text-sm text-center text-white" id="tabExample" role="tablist">
             {tabTitles.map((title, index) => (
               <li className="" role="presentation" key={index}>
