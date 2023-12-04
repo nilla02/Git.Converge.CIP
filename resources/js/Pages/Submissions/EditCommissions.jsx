@@ -146,7 +146,7 @@ const fields = {
 
 };
 
-export default function EditSubmissions({ className = "", submission, auth ,users,notifications }) {
+export default function EditSubmissions({ className = "", submission, auth ,notifications }) {
     const {
         data,
         setData,
@@ -159,7 +159,7 @@ export default function EditSubmissions({ className = "", submission, auth ,user
     } = useForm({
         ...submission,
     });
-    console.log(auth);
+    console.log(submission.agent);
     function handleFileChange(key, e) {
         setData(key, e.target.files[0]);
     }
@@ -411,13 +411,13 @@ export default function EditSubmissions({ className = "", submission, auth ,user
       <th scope="row" className="px-3 py-2 border">
         Authorized Agent
       </th>
-      <td className="px-3 py-2 border">{submission.agent_id}</td>
+      <td className="px-3 py-2 border">{submission.agent}</td>
     </tr>
     <tr>
       <th scope="row" className="px-3 py-2 border">
         Authorized Agent License Number
       </th>
-      <td className="px-3 py-2 border">{submission.agent_id}</td>
+      <td className="px-3 py-2 border">{submission.users}</td>
     </tr>
     <tr>
       <th scope="row" className="px-3 py-2 border">

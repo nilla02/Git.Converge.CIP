@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { BsCloudUpload } from "react-icons/bs";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
+import StatusLabel from "@/Components/statuslabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { useForm } from "@inertiajs/react";
@@ -56,7 +57,7 @@ const fields = {
             "ceo",
             "corp_sec"
         ],
-        label: "status",
+        label: "Status",
         field: "select",
         options: [
             { value: 1, label: "Pending Review" },//compliance ddo only
@@ -101,7 +102,7 @@ const fields = {
         ],
     },
 
-    COR: {
+    country_id: {
         roles: [
             "agents",
             "compliance_officer",
@@ -140,13 +141,13 @@ const fields = {
         field: "input",
         type: "text",
     },
-    TOA: {
+    type_of_applicant: {
         roles: ["agents", "compliance_officer", "website_admin", "ceo"],
         label: "Type of Applicant",
         field: "input",
         type: "text",
     },
-    TOI: {
+    type_of_investment: {
         roles: ["agents", "compliance_officer", "website_admin", "ceo"],
         label: "TOI",
         field: "input",
@@ -729,6 +730,7 @@ export default function EditSubmissions({
                 </div>
             );
         }
+
         if (field.field === "select_2") {
             return (
                 <div >
@@ -869,7 +871,7 @@ export default function EditSubmissions({
 
             return (
                 <div key={key}>
-                    <InputLabel htmlFor={key} value={field.label} />
+                    <StatusLabel htmlFor={key} value={field.label} />
 
                     <select
                         id={key}
@@ -957,9 +959,9 @@ export default function EditSubmissions({
             return (
                 <div>
                     <InputLabel htmlFor={key} value={field.label} />
-                    <a href={val} target="_blank">
-                        {val}
-                    </a>{" "}
+                  <a href={val} target="_blank" rel="noopener noreferrer">
+        View File
+    </a>{" "}
                     <button
                         type="button"
                         onClick={() => handleFileDelete(key)}

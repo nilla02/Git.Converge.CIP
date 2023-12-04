@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TestTableTwoController;
+use App\Http\Controllers\TableController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::get('/user/{id}/edit', [UserController::class, 'show'])->name('user.show'
 
 Route::post('/mark-as-read/{notification}',[NotificationController::class,'markAsRead'])->name('markAsRead');
 
+Route::get('/notification-count', [NotificationController::class, 'getNotificationCount'])->name('getNotificationCount');
 
 
 Route::post('/TestTable/store', [TestTableController::class, 'store'])->name('TestTable.store');
@@ -55,7 +57,6 @@ Route::post('/form-table-two/store', [TestTableTwoController::class, 'store'])->
 Route::post('/activity_log/store', [ActivityLogController::class, 'store'])->name('activity_log.store');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
-Route::get('/notification-count', [NotificationController::class, 'getNotificationCount'])->name('getNotificationCount');
 
 
 Route::middleware('auth')->group(function () {
@@ -75,6 +76,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function ()
     Route::put('co/assign/submissions/{id}/edit', [TestTableController::class, 'assignco'])->name('EditCO.assignco');
     Route::get('ddo/assign/submissions/{id}/edit', [TestTableController::class, 'show3'])->name('EditDDO.show');
     Route::get('co/assign/submissions/{id}/edit', [TestTableController::class, 'show4'])->name('EditCO.show');
+    Route::get('/submissions/application_forms', [TableController::class, 'index'])->name('Table');
 });
 
 //dashboards

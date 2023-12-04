@@ -574,7 +574,7 @@ export default function Authenticated({ user }) {
                             </div>
                         </div>
                         <div className=" text-sm font-normal capitalize leading-[23px]">
-                            Submissions
+                        Citizenship Investment applications
                         </div>
                     </a>
                 ) : null}

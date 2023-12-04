@@ -19,14 +19,19 @@ class CreateTestTablesTable extends Migration
             $table->text('file_path')->nullable();
             $table->text('Region')->nullable();
             $table->text('country_of_birth')->nullable();
+<<<<<<< Updated upstream
  $table->text('country_of_issue')->nullable();
             $table->integer('payment_amount')->nullable();
+=======
+            $table->text('country_of_issue')->nullable();
+            $table->text('payment_amount')->nullable();
+>>>>>>> Stashed changes
             $table->text('passport_number')->nullable();
             $table->text('visa_Number')->nullable();
             $table->date('visa_issue_date')->nullable();
             $table->date('visa_expiration_date')->nullable();
             $table->date('date_of_payment')->nullable();
-            $table->text('country_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->text('co_id')->nullable();
             $table->text('acc_id')->nullable();
             $table->text('risk_id')->nullable();
@@ -113,10 +118,11 @@ class CreateTestTablesTable extends Migration
             $table->dateTime('accounts_approval_date')->nullable();
             $table->text('addon')->nullable();
             $table->dateTime('processing_fees_received_date')->nullable();
+            $table->dateTime('open_at')->nullable();
             $table->dateTime('risk_level_received_date')->nullable();
             $table->foreign('agent_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('status');
-
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->timestamps();
         });
     }

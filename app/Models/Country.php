@@ -13,6 +13,8 @@ class Country extends Model
     protected $fillable = [
         'name', 'code'
     ];
+
+    protected $table = 'countries';
     public function testtable()
     {
         return $this->hasOne(TestTable::class, 'country_id');
