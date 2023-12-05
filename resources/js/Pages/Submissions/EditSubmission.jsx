@@ -112,7 +112,7 @@ const fields = {
             "risk_assessment_officer",
         ],
         label: "Country of Residence",
-        field: "input",
+        field: "country",
         type: "text",
     },
     ddo_notes: {
@@ -138,24 +138,24 @@ const fields = {
         ],
         label: "Region",
         label: "Region",
-        field: "input",
+        field: "region",
         type: "text",
     },
     type_of_applicant: {
         roles: ["agents", "compliance_officer", "website_admin", "ceo"],
         label: "Type of Applicant",
-        field: "input",
+        field: "TOA",
         type: "text",
     },
     type_of_investment: {
         roles: ["agents", "compliance_officer", "website_admin", "ceo"],
-        label: "TOI",
-        field: "input",
+        label: "Type of investment",
+        field: "TOI",
         type: "text",
     },
 
     risk_level:{
-        roles: [ "website_admin", "ceo","risk_assessment_officer"],
+        roles: [ "website_admin","due_diligence_officer"],
         label: "Risk_Level",
         field: "select_2",
 
@@ -655,6 +655,9 @@ export default function EditSubmissions({
     risk,
     country,
     notifications,
+    region,
+    toi,
+    toa
 }) {
     const {
         data,
@@ -724,18 +727,106 @@ return value.map(x=>(
     const genField = (key) => {
         const field = fields[key];
         const userRole = auth.user.role_names[0] || "0";
-
-        // console.log("Processing field:", key);
-
-        // console.log("Field type:", field?.field);
-
-        // console.log(auth.user);
+console.log(data.ddo.name)
 
         if (field.roles && !field.roles.includes(userRole)) {
             return <div key={key}></div>;
         }
 
+
+        if (field.field === "country") {
+            return (
+                <div key={key}>
+                    <InputLabel htmlFor={key} value={field.label} />
+                    <select
+                        className="w-full rounded"
+                        value={data.country_id || ""} // Set the default value to the stored country ID
+                        onChange={(e) => setData("country_id", e.target.value)}
+                    >
+                        <option value="" disabled>
+                            Select a country
+                        </option>
+                        {country.map((user) => (
+                            <option key={user.id} value={user.code}>
+                                {user.name}
+                            </option>
+                        ))}
+                    </select>
+                    <InputError message={errors[key]} className="mt-2" />
+                </div>
+            );
+        }
+
+        if (field.field === "region") {
+            return (
+                <div key={key}>
+                    <InputLabel htmlFor={key} value={field.label} />
+                    <select
+                        className="w-full rounded"
+                        value={data.Region || ""} // Set the default value to the stored country ID
+                        onChange={(e) => setData("Region", e.target.value)}
+                    >
+                        <option value="" disabled>
+                            Select a Region
+                        </option>
+                        {region.map((user) => (
+                            <option key={user.id} value={user.code}>
+                                {user.name}
+                            </option>
+                        ))}
+                    </select>
+                    <InputError message={errors[key]} className="mt-2" />
+                </div>
+            );
+        }
+
+        if (field.field === "TOI") {
+            return (
+                <div key={key}>
+                    <InputLabel htmlFor={key} value={field.label} />
+                    <select
+                        className="w-full rounded"
+                        value={data.type_of_investment || ""}
+                        onChange={(e) => setData("type_of_investment", e.target.value)}
+                    >
+                        <option value="" disabled>
+                            Select a Region
+                        </option>
+                        {toi.map((user) => (
+                            <option key={user.id} value={user.code}>
+                                {user.name}
+                            </option>
+                        ))}
+                    </select>
+                    <InputError message={errors[key]} className="mt-2" />
+                </div>
+            );
+        }
+
+        if (field.field === "TOA") {
+            return (
+                <div key={key}>
+                    <InputLabel htmlFor={key} value={field.label} />
+                    <select
+                        className="w-full rounded"
+                        value={data. type_of_applicant || ""}
+                        onChange={(e) => setData(" type_of_applicant", e.target.value)}
+                    >
+                        <option value="" disabled>
+                            Select a applicant type.
+                        </option>
+                        {toa.map((user) => (
+                            <option key={user.id} value={user.code}>
+                                {user.name}
+                            </option>
+                        ))}
+                    </select>
+                    <InputError message={errors[key]} className="mt-2" />
+                </div>
+            );
+        }
         if (field.field === "input") {
+
             return (
                 <div key={key}>
                     <InputLabel htmlFor={key} value={field.label} />
@@ -760,14 +851,15 @@ return value.map(x=>(
                     <InputLabel htmlFor={key} value={field.label} />
 
                     {/* Text Input */}
-                    <TextInput
-                        id={key}
+                    <textarea  id={key}
                         value={data[key]}
                         onChange={(e) => setData(key, e.target.value)}
                         type={field.type}
-                        className="mt-1 block w-full"
-                        name={key}
-                    />
+                        className="mt-1 block w-full resize rounded-md"
+                        name={key} ></textarea>
+
+
+
 
                     {/* Input Error */}
                     <InputError message={errors[key]} className="mt-2" />
@@ -793,6 +885,17 @@ return value.map(x=>(
                                 </option>
                             ))}
                         </select>
+
+                    <InputError message={errors[key]} className="mt-2" />
+                </div>
+            );
+        }
+
+        if (field.field === "select_country") {
+            return (
+                <div >
+                    <InputLabel htmlFor={key} value={field.label} />
+
 
                     <InputError message={errors[key]} className="mt-2" />
                 </div>
@@ -1084,17 +1187,8 @@ return value.map(x=>(
                     <ul>
                     {displayfiles(val)}
 </ul>
-                    {/*
-                  <a href={val} target="_blank" rel="noopener noreferrer">
-        View File
-    </a>{" "}
-                    <button
-                        type="button"
-                        onClick={() => handleFileDelete(key)}
-                        className="text-red-500 hover:text-red-700"
-                    >
-                        Delete
-                    </button> */}
+
+
                 </div>
             );
         }

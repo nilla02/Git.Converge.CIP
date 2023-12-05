@@ -544,18 +544,23 @@ return back()->withInput();
     {
 
 
-        $submission = TestTable::findOrFail($id);
+        $submission = TestTable::with('country','agent','ddo','risk','acc','co')->findOrFail($id);
         $result = TestTable::where('principle_applicant_id', $id)->get();
 $risk=Risk_level::all();
         $country= Country::all();
-
+        $regions = Region::all();
+        $type_of_applicant = Applicant_Type::all();
+        $gender = Gender::all();
+        $mstatus = MaritualStatus::all();
+        $toi = Type_of_investment::all();
         if (Auth::user()->id == $submission->co_id && !$submission->open_at) {
 
             $submission->update(['open_at' => Carbon::now()]);
         }
         $notifications = auth()->user()->unreadNotifications;
 
-        return Inertia::render('Submissions/EditSubmission', ['submission' => $submission,'result'=>$result,'country'=>$country,'notifications'=>$notifications]);
+        return Inertia::render('Submissions/EditSubmission', ['risk'=>$risk,'submission' => $submission,'result'=>$result,'country'=>$country,'notifications'=>$notifications,  'region'=>$regions,'toa'=>$type_of_applicant
+        ,'gender'=>$gender,'mstatus'=>$mstatus,'toi'=>$toi]);
     }
 
     public function show2(string $id)
