@@ -19,27 +19,22 @@ class CreateTestTablesTable extends Migration
             $table->text('file_path')->nullable();
             $table->text('Region')->nullable();
             $table->text('country_of_birth')->nullable();
-<<<<<<< Updated upstream
- $table->text('country_of_issue')->nullable();
-            $table->integer('payment_amount')->nullable();
-=======
             $table->text('country_of_issue')->nullable();
-            $table->text('payment_amount')->nullable();
->>>>>>> Stashed changes
+            $table->integer('payment_amount')->nullable();
             $table->text('passport_number')->nullable();
             $table->text('visa_Number')->nullable();
             $table->date('visa_issue_date')->nullable();
             $table->date('visa_expiration_date')->nullable();
             $table->date('date_of_payment')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
-            $table->text('co_id')->nullable();
-            $table->text('acc_id')->nullable();
-            $table->text('risk_id')->nullable();
+            $table->unsignedBigInteger('co_id')->nullable();
+            $table->unsignedBigInteger('acc_id')->nullable();
+            $table->unsignedBigInteger('risk_id')->nullable();
             $table->text('risk_level')->nullable();
             $table->text('accounts_approval')->nullable();
-            $table->text('promoter_id')->nullable();
-            $table->text('ddo_id')->nullable();
-            $table->text('ceo_id')->nullable();
+            $table->unsignedBigInteger('promoter_id')->nullable();
+            $table->unsignedBigInteger('ddo_id')->nullable();
+            $table->unsignedBigInteger('ceo_id')->nullable();
             $table->text('ceo_notes')->nullable();
             $table->text('co_notes')->nullable();
             $table->text('ddo_notes')->nullable();
@@ -111,15 +106,20 @@ class CreateTestTablesTable extends Migration
             $table->dateTime('source_of_funds_docs_sent_date')->nullable();
             $table->dateTime('processing_fee_received_date')->nullable();
             $table->text('preprocessing')->nullable();
+            $table->text('fees_cleared')->nullable();
             $table->text('law_enforcement_sent')->nullable();
             $table->dateTime('preprocess_law_enforcement_docs_sent_date')->nullable();
             $table->text('proceed_due_diligence')->nullable();
             $table->dateTime('proceed_due_diligence_docs_sent_date')->nullable();
             $table->dateTime('accounts_approval_date')->nullable();
-            $table->text('addon')->nullable();
+            $table->json('addon')->nullable();
             $table->dateTime('processing_fees_received_date')->nullable();
             $table->dateTime('open_at')->nullable();
             $table->dateTime('risk_level_received_date')->nullable();
+            $table->foreign('acc_id')->references('id')->on('users');
+            $table->foreign('risk_id')->references('id')->on('users');
+            $table->foreign('ddo_id')->references('id')->on('users');
+            $table->foreign('co_id')->references('id')->on('users');
             $table->foreign('agent_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('status');
             $table->foreign('country_id')->references('id')->on('countries');

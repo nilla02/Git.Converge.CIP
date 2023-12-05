@@ -10,11 +10,14 @@ class GroupModel extends Model
     use HasFactory;
 
     protected $fillable = [
+        'type_of_agency',
 'first_name',
 'last_name',
 'Group_name',
 'Licensee',
-'Owner',
+'email',
+'address',
+'country',
 
      ];
 }

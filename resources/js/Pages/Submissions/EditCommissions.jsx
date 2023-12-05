@@ -411,11 +411,18 @@ export default function EditSubmissions({ className = "", submission, auth ,noti
       <th scope="row" className="px-3 py-2 border">
         Authorized Agent
       </th>
-      <td className="px-3 py-2 border">{submission.agent}</td>
+      <td className="px-3 py-2 border">{submission.agency}</td>
     </tr>
     <tr>
       <th scope="row" className="px-3 py-2 border">
-        Authorized Agent License Number
+Representative
+      </th>
+      <td className="px-3 py-2 border">{submission.agent.name}</td>
+    </tr>
+
+    <tr>
+      <th scope="row" className="px-3 py-2 border">
+      Promoter
       </th>
       <td className="px-3 py-2 border">{submission.users}</td>
     </tr>
@@ -429,7 +436,7 @@ export default function EditSubmissions({ className = "", submission, auth ,noti
       <th scope="row" className="px-3 py-2 border">
         Region
       </th>
-      <td className="px-3 py-2 border">{submission.Region}</td>
+      <td className="px-3 py-2 border">{submission.country.name}</td>
     </tr>
     <tr>
       <th scope="row" className="px-3 py-2 border">

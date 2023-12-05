@@ -420,7 +420,7 @@ $notifications = auth()->user()->unreadNotifications;
 
 
         $principalApplicantId = null;
-        if ($applicantType === '1' || $applicantType === '3') {
+        if ($applicantType === '1' || $applicantType === '3' || $applicantType === '4') {
             $principalApplicantId = $request->input('principal_applicant_id');
         }
 
@@ -549,19 +549,23 @@ return back()->withInput();
 $risk=Risk_level::all();
         $country= Country::all();
 
+        if (Auth::user()->id == $submission->co_id && !$submission->open_at) {
+
+            $submission->update(['open_at' => Carbon::now()]);
+        }
         $notifications = auth()->user()->unreadNotifications;
 
-        return Inertia::render('Submissions/EditSubmission', ['risk'=>$risk,'submission' => $submission,'result'=>$result,'country'=>$country,'notifications'=>$notifications]);
+        return Inertia::render('Submissions/EditSubmission', ['submission' => $submission,'result'=>$result,'country'=>$country,'notifications'=>$notifications]);
     }
 
     public function show2(string $id)
     {
 
 
-        $submission = TestTable::findOrFail($id);
 
+        $submission = TestTable::with('country','agent','ddo','risk','acc','co')->findOrFail($id);
         $notifications = auth()->user()->unreadNotifications;
-        return Inertia::render('Submissions/EditCommissions', ['submission' => $submission,'notifications'=>$notifications]);
+        return Inertia::render('Submissions/EditCommissions', ['submission' => $submission,'notifications'=>$notifications,]);
     }
     public function show3(string $id)
     {
@@ -599,6 +603,7 @@ $risk=Risk_level::all();
             'Payment_Amount' => 'nullable',
             'Date_Of_Payment' => 'nullable',
             'document_checklist_path' => 'nullable',
+            'open_at' => 'nullable',
             'ddo_notes' => 'nullable',
             'risk_level'=>'nullable',
             'co_notes' => 'nullable',
@@ -757,6 +762,7 @@ $risk=Risk_level::all();
             'document_checklist_path' => 'nullable',
             'law_enforcement_sent'=>'nullable',
             'ddo_notes' => 'nullable',
+            'open_at' => 'nullable',
             'citizenship_certificate_id'=>'nullable',
             'accounts_approval'=>'nullable',
             'co_notes' => 'nullable',
@@ -857,6 +863,7 @@ $risk=Risk_level::all();
             'professional_certificate_notary_path',
             'professional_certificate_attorney_path',
             'professional_certificate_oaths_commissioner_path',
+            'addon',
         ];
 
         $tableId = $submission->id;
@@ -877,10 +884,26 @@ $risk=Risk_level::all();
             $userFolder = storage_path('app/media/' . $userGroup . '/' . $primary->ref_number . '/' . $submission->principle_applicant_id . '/' . $submission->id);
         }
         foreach ($patharray as $value) {
+
+
             if ($request->hasFile($value)) {
                 $file = $request->file($value);
-                $validated[$value] = time() . '.' . $file->extension();
-                $file->move($userFolder, $validated[$value]);
+                if(is_array($file)){
+                    $files=[];
+                    foreach($file as $key => $sub_file)
+                    {
+                        $file_name = time().'.'.$sub_file->extension();
+
+                        $sub_file->move($userFolder, $file_name);
+$files[]=$file_name;
+                    }
+                    $validated[$value]=$files;
+                }
+                else{
+                    $validated[$value] = time() . '.' . $file->extension();
+                    $file->move($userFolder, $validated[$value]);
+                }
+
             } else {
                 unset($validated[$value]);
             }
@@ -937,7 +960,7 @@ $risk=Risk_level::all();
 
         $newStatus = $validated['status_id'];
         //Accept
-        if ($newStatus == 15 || 14) {
+        if ($newStatus == 15 || $newStatus == 14) {
 
             $agent = $submission->ddo_id;
             $ref_number = $submission->ref_number;
@@ -990,8 +1013,11 @@ $risk=Risk_level::all();
 
         }
 
-       TestTable::where('principle_applicant_id', $id)
-                ->update(['status_id' => $validated['status_id']]);
+        TestTable::where('principle_applicant_id', $id)
+        ->where('type_of_applicant', '!=', 4)
+        ->where('status_id', '!=', 5)
+        ->update(['status_id' => $validated['status_id']]);
+
 
         return redirect()->route('Draft');
     }

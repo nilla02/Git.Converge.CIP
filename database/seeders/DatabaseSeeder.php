@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 UserSeeder::class,
 Risk_Level_Management::class,
 Statuses::class,
+business_type_seeder::class,
 
         ]);
     }

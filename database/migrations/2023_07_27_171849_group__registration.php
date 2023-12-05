@@ -13,6 +13,10 @@ return new class extends Migration
     {
           Schema::create('group_models', function (Blueprint $table) {
             $table->id();
+            $table->text('type_of_agency')->required();
+            $table->string('address')->required();
+            $table->string('country')->required();
+            $table->string('email')->unique();
             $table->text('first_name')->required();
             $table->text('last_name')->required();
             $table->text('Group_name')->required();

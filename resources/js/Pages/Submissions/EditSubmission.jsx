@@ -118,13 +118,13 @@ const fields = {
     ddo_notes: {
         roles: ["due_diligence_officer",   "risk_assessment_officer", "website_admin", "ceo", "promoter"],
         label: "DDO Notes",
-        field: "input",
+        field: "comment",
         type: "text",
     },
     co_notes: {
         roles: ["compliance_officer", "website_admin",   "risk_assessment_officer", "ceo", "promoter"],
-        label: "Co Notes",
-        field: "input",
+        label: "Verification Officer Notes",
+        field: "comment",
         type: "text",
     },
     Region: {
@@ -638,6 +638,12 @@ const fields = {
         field: "file",
         type: "text",
     },
+  addon: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Addons",
+        field: "xfile",
+        type: "text",
+    },
 };
 
 export default function EditSubmissions({
@@ -665,9 +671,26 @@ export default function EditSubmissions({
     console.log(auth);
 
     function handleFileChange(key, e) {
-        setData(key, e.target.files[0]);
+        const files = e.target.files
+        setData(key,files.length>1?files:files[0]);
     }
 
+    function displayfiles(value){
+
+        if(Array.isArray(value)){
+
+return value.map(x=>(
+
+        <li>
+            <a href={x} target="_blank" rel="noopener noreferrer">
+            <span style={{textDecoration: 'underline', color:'blue'}}>{x}</span>
+            </a> - <button onClick={(e) => {e.preventDefault(); console.log('hehehehheeh') }} >Delete</button>
+        </li>
+
+        ))
+        }
+        return ""
+    }
     const updatePassword = (e) => {
         e.preventDefault();
         const isConfirmed = window.confirm("Are you sure you want to save?");
@@ -730,7 +753,27 @@ export default function EditSubmissions({
                 </div>
             );
         }
+        if (field.field === "comment") {
+            return (
+                <div key={key}>
+                    {/* Input Label */}
+                    <InputLabel htmlFor={key} value={field.label} />
 
+                    {/* Text Input */}
+                    <TextInput
+                        id={key}
+                        value={data[key]}
+                        onChange={(e) => setData(key, e.target.value)}
+                        type={field.type}
+                        className="mt-1 block w-full"
+                        name={key}
+                    />
+
+                    {/* Input Error */}
+                    <InputError message={errors[key]} className="mt-2" />
+                </div>
+            );
+        }
         if (field.field === "select_2") {
             return (
                 <div >
@@ -972,7 +1015,91 @@ export default function EditSubmissions({
                 </div>
             );
         }
+        if (field.field === "xfile") {
+            const val = data[key];
+
+            if (!val || val instanceof File) {
+                const handleDrop = (e) => {
+                    e.preventDefault();
+                    const droppedFile = e.dataTransfer.files[0];
+                    handleFileChange(key, { target: { files: [droppedFile] } });
+                };
+
+                return (
+                    <div key={key}>
+                        <div className="mb-0">
+                            <InputLabel htmlFor={key} value={field.label} />
+                            <div
+                                className="relative"
+                                onDrop={handleDrop}
+                                onDragOver={(e) => e.preventDefault()}
+                            >
+                                {val && val.type === "application/pdf" ? (
+                                    <embed
+                                        src={URL.createObjectURL(val)}
+                                        type="application/pdf"
+                                        width="100%"
+                                        height="500px"
+                                    />
+                                ) : (
+                                    <div
+                                        className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer"
+                                        onClick={() =>
+                                            document
+                                                .querySelector(
+                                                    `input[name="${key}"]`
+                                                )
+                                                .click()
+                                        }
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDrop={handleDrop}
+                                    >
+                                        <BsCloudUpload className="text-3xl mb-2 mx-auto text-gray-400" />
+                                        <p className="text-gray-500">
+                                            {val
+                                                ? "File type not supported."
+                                                : "Drag and drop a file here or click to select a file."}
+                                        </p>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            className="hidden"
+                                            name={key}
+                                            onChange={(e) =>
+                                                handleFileChange(key, e)
+                                            }
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                            <span className="text-red-600">{errors.File}</span>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div>
+                    <InputLabel htmlFor={key} value={field.label} />
+                    <ul>
+                    {displayfiles(val)}
+</ul>
+                    {/*
+                  <a href={val} target="_blank" rel="noopener noreferrer">
+        View File
+    </a>{" "}
+                    <button
+                        type="button"
+                        onClick={() => handleFileDelete(key)}
+                        className="text-red-500 hover:text-red-700"
+                    >
+                        Delete
+                    </button> */}
+                </div>
+            );
+        }
     };
+
     return (
         <AuthenticatedLayoutAA user={auth.user}
         notifications={notifications}>

@@ -2,7 +2,7 @@ import AuthenticatedLayoutAA from "@/Layouts/AuthenticatedLayoutAA";
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
 import GroupUpload from "@/Components/GroupUpload";
 
-export default function AgencyReg({ auth, users, groups,notifications }) {
+export default function AgencyReg({ auth,countries,btype, users, groups,notifications }) {
 
 
     return (
@@ -18,7 +18,7 @@ export default function AgencyReg({ auth, users, groups,notifications }) {
             <div className="py-12">
                 <div className="lg:ml-[235px]  sm:ml-[235px] sm:px-6 lg:px-8">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
-                        <GroupUpload />
+                        <GroupUpload countries={countries} btype={btype}/>
                     </div>
                 </div>
             </div>

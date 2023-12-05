@@ -67,6 +67,7 @@ class TestTable extends Model
     }
 
 protected $appends = ['status','day_passed'];
+
     protected static function booted(): void
     {
         static::created(function (TestTable $testtable) {
@@ -79,6 +80,7 @@ protected $appends = ['status','day_passed'];
   $testtable->ref_number =$authUserid.$authUserFirstLetter.$submission->type_of_investment.$submission->Region.$tableId.$submission->type_of_applicant;
   $testtable->save();
         });
+
     }
 
 
@@ -181,6 +183,7 @@ protected $appends = ['status','day_passed'];
     'proceed_due_diligence',
     'proceed_due_diligence_docs_sent_date',
     'addon',
+    'open_at',
     'processing_fees_received_date',
     'risk_level_received_date',
     'accounts_approval_date',
@@ -188,27 +191,47 @@ protected $appends = ['status','day_passed'];
   ];
 
 
+
 protected function getStatusAttribute($value)
 {
     return Status_model::find($this->status_id);
 }
 
-protected function getCountryAttribute($value)
+public function country()
 {
-    return Country::find($this->country_id);
+    return $this->belongsTo(Country::class);
 }
 
-protected function getAgentAttribute($value)
+public function agent()
 {
-    return User::find($this->agent_id);
-}
-
-protected function getPromoterAttribute($value)
-{
-    return User::find($this->promoter_id);
+    return $this->belongsTo(User::class);
 }
 
 
+public function Promoter()
+{
+    return $this->belongsTo(User::class);
+}
+
+public function ddo()
+{
+    return $this->belongsTo(User::class,'ddo_id');
+}
+
+public function co()
+{
+    return $this->belongsTo(User::class,'co_id');
+}
+
+public function risk()
+{
+    return $this->belongsTo(User::class,'risk_id');
+}
+
+public function acc()
+{
+    return $this->belongsTo(User::class,'acc_id');
+}
   protected function generateFilePath($value)
   {
     if(!$value) return null;
@@ -462,4 +485,23 @@ protected function getPromoterAttribute($value)
   {
     return $this->generateFilePath($value);
   }
+
+  protected function getAddonAttribute($value)
+  {
+      $paths = [];
+
+      if ($value !== null && is_string($value)) {
+          $decoded = json_decode($value, true);
+
+
+          if (is_array($decoded)) {
+              foreach ($decoded as $key => $path) {
+                  $paths[] = $this->generateFilePath($path);
+              }
+          }
+      }
+
+      return $paths;
+  }
+
 }
