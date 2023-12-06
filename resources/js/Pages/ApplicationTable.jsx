@@ -122,23 +122,23 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
         }, [searchQuery, currentPage]);
 
     const columnsByRole = {
-        processing:["id","ref_number","First Name", "Last Name", "Status", "Actions" ],
-        corp_sec:["id","ref_number","First Name", "Last Name", "Status", "Actions"],
-        accountant:["id","ref_number","First Name", "Last Name", "Status", "Actions"],
-        agents: ["id","ref_number","First Name", "Last Name", "Status", "Actions"],
-        super_administrators: ["First Name", "Last Name", "Status", "Actions"],
+        processing:["id","ref_number","First Name", "Last Name", "Status",  ],
+        corp_sec:["id","ref_number","First Name", "Last Name", "Status", ],
+        accountant:["id","ref_number","First Name", "Last Name", "Status", ],
+        agents: ["id","ref_number","First Name", "Last Name", "Status", ],
+        super_administrators: ["First Name", "Last Name", "Status", ],
         compliance_officer: [
             "First Name",
             "Last Name",
             "Status",
-            "Actions",
+
             "co_notes",
         ],
         admin_compliance_officer: [
             "First Name",
             "Last Name",
             "Status",
-            "Actions",
+
             "co_notes",
             "Assigned_Compliance",
             "ACO",
@@ -148,7 +148,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "First Name",
             "Last Name",
             "Status",
-            "Actions",
+
             "co_notes",
             "Duration",
         ],
@@ -156,7 +156,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "First Name",
             "Last Name",
             "Status",
-            "Actions",
+
             "co_notes",
             "Assigned_DDO",
             "ADDO",
@@ -174,7 +174,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "First Name",
             "Last Name",
             "Status",
-            "Actions",
+
             "ACO",
             "ADDO",
             "Duration",
@@ -210,7 +210,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "First Name",
             "Last Name",
             "Status",
-            "Actions",
+
             "FV",
             "Duration",
             "ddo_notes",
@@ -222,7 +222,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "Last Name",
             "Status",
             "FV",
-            "Actions",
+
             "ddo_notes",
             "co_notes",
             "ceo_notes",

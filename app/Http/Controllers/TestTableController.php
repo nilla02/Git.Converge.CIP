@@ -22,9 +22,15 @@ use Spatie\Activitylog\Models\Activity;
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Pagination\Paginator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
+use App\Mail\ApplicationCreated;
 use App\Events\MessageReceived;
-
-
+use Illuminate\Support\Facades\Mail; // Add this line
+use App\Notifications\Granted;
+use App\Notifications\DWCause;
+use App\Notifications\Denied;
+use App\Notifications\DefaultNotify;
+use App\Notifications\Assigned;
 class TestTableController extends Controller
 {
     /**
@@ -48,7 +54,7 @@ if ($request->days){
 
         $users = TestTable::query()
         // ->with('status')
-            ->latest()
+
             ->when($date,function ($query) use ($date){
 $query->where('created_at','<=',$date);
             })
@@ -57,10 +63,10 @@ $query->where('created_at','<=',$date);
                 ->orWhere('status_id', '13')->orWhere('status_id', '19')->orWhere('status_id', '20');
             })
             ->when(in_array('due_diligence_officer', $roles), function ($query) use ($user) {
-                $query->where('ddo_id', $user->id)->where('status_id', '2')->orWhere('status_id', '3')->orWhere('status_id', '4');
+                $query->where('ddo_id', $user->id)->where('type_of_applicant', '2')->where('status_id', '2')->orWhere('status_id', '3')->orWhere('status_id', '4');
             })
             ->when(in_array('promoter', $roles), function ($query) use ($user) {
-                $query->where('promoter_id', $user->id);
+                $query->where('promoter_id', $user->id)->where('type_of_applicant', '2');
             })
             ->when(in_array('accountant', $roles), function ($query) use ($user) {
                 // $query->where('acc_id', $user->id)->where('SendtoAcc', $user->id);
@@ -76,7 +82,7 @@ $query->where('created_at','<=',$date);
             })
 
             ->when(in_array('risk_assessment_officer', $roles), function ($query) use ($user) {
-                $query->where('ddo_id', $user->id)->where('status_id', '2')->orWhere('status_id', '3')->orWhere('status_id', '4');
+                $query->where('ddo_id', $user->id)->where('type_of_applicant', '2')->where('risk_level', '2')->orWhere('risk_level', '3');
             })
             ->when(in_array('admin_due_diligence_officer', $roles), fn (Builder $query, $topic) => $query->where('status_id', 'pre-processing_accept'))
 
@@ -85,6 +91,7 @@ $query->where('created_at','<=',$date);
                 in_array('ceo', $roles),
                 fn ($query) => $query->where(function ($query) {
                     $query->where('status_id', 'SendtoCEO')
+                    ->where('type_of_applicant', '2')
                         ->orWhere('status_id', 'pending_review')
                         ->orWhere('status_id', 'pre_processing_accept')
                         ->orWhere('status_id', 'non_Compliant')
@@ -97,12 +104,14 @@ $query->where('created_at','<=',$date);
                 in_array('processing', $roles),
                 fn ($query) => $query->where(function ($query) {
                     $query->where('status_id', '32')
+                    ->where('type_of_applicant', '2')
                         ->orWhere('status_id', '33');
 
                 })
             )
 
-            ->when(in_array('compliance_officer', $roles), fn (Builder $query, $topic) => $query->where('status_id', '17')
+            ->when(in_array('compliance_officer', $roles), fn (Builder $query, $topic) => $query->where('co_id', $user->id)->orwhere('status_id', '17')
+            ->where('type_of_applicant', '2')
             ->orWhere('status_id', '10')
             ->orWhere('status_id', '22')
 
@@ -333,18 +342,18 @@ $notifications = auth()->user()->unreadNotifications;
         $roles = $user->getRoleNames()->toArray();
 
         $users = TestTable::query()
-        ->latest()
+
         ->when(in_array('agents', $roles), function ($query) use ($user) {
             $query->where('agent_id', $user->id);
         })
-        ->take(6)
+        ->take(5)
 ->get();
 $userstable = TestTable::query()
-->latest()
+
 ->when(in_array('agents', $roles), function ($query) use ($user) {
     $query->where('agent_id', $user->id);
 })
-->take(6)
+->take(5)
 ->get();
 
 
@@ -527,8 +536,19 @@ $notifications = auth()->user()->unreadNotifications;
 
 
         $TestTable->save();
-        FormSuccessfullyCreatedEvent::dispatch([$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id,Auth::id()], 'Testing');
-        Auth::user()->notify(new phase1($TestTable));
+
+        FormSuccessfullyCreatedEvent::dispatch([Auth::id()], 'The Application created has been submitted and is now in the the queue.');
+        FormSuccessfullyCreatedEvent::dispatch([$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id,],'The application '.$TestTable->ref_number."has been added to your assignment queue");
+Auth::user()->notify(new phase1($TestTable));
+$userIds = [Auth::id(),$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id];
+
+// Find user models based on the provided IDs
+$users = User::find($userIds);
+
+// Dispatch the Assigned notification for each user
+foreach ($users as $user) {
+    $user->notify(new Assigned($TestTable));
+}
     }
 
 
@@ -915,30 +935,45 @@ $files[]=$file_name;
         }
 
 
-        $submission->update($validated);
+
         //Status Update CodeL
         $newStatus = $validated['status_id'];
         //Accept
-        if ($newStatus == 11) {
+        if ($newStatus == 13) {
 
             $agent = $submission->agent_id;
             StatusChangedEvent::dispatch([$agent],'Your Application has been Accepted');
-
-        }
-
-        $newStatus = $validated['status_id'];
-        //Accept
-        if ($newStatus == 17) {
-
-            $agent = $submission->acc_id;
-            $agentco = $submission->co_id;
-            $ref_number = $submission->ref_number;
-            logger("Before dispatching StatusChangedEvent");
-            StatusChangedEvent::dispatch([$agent, $agentco ,"1"],$ref_number."Has been submitted by the Autherised Agent");
-    logger("After dispatching StatusChangedEvent");
+            $user = User::find($agent);
+            $customMessage = 'Your Application has been Accepted ';
 
 
         }
+    //Status Update CodeL
+    $newStatus = $validated['status_id'];
+    //Accept
+    if ($newStatus == 9) {
+
+        $agent = $submission->agent_id;
+        StatusChangedEvent::dispatch([$agent],'Your Application has been Delayed.More information has been');
+        $applicantName=$submission->first_name.$submission->last_name;
+        $applicationid=$submission->id;
+        $data = [
+
+                'applicantName' => $applicantName,
+                'applicationid'=>$applicationid,
+
+
+
+        ];
+        $pdf = \PDF::loadView('emails.myTestMail', $data);
+        $user = Auth::user();
+
+        Notification::send($user, new DWCause($data, $pdf));
+
+
+    }
+
+
 
 
         $newStatus = $validated['accounts_approval'];
@@ -1001,22 +1036,65 @@ $files[]=$file_name;
             $agentddo = $submission->agent_id;
             $ceo = $submission->agent_id;
             $ref_number = $submission->ref_number;
-            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been Granted");
+
+
+
+            StatusChangedEvent::dispatch([$ceo,"1"], "Application".$ref_number. "Has been Granted");
 
         }
 
 
         $newStatus = $validated['status_id'];
+        $existingStatus = $submission->status_id;
         //Accept
         if ($newStatus == 8) {
 
 
             $agentddo = $submission->agent_id;
-            $ceo = $submission->agent_id;
+            $agent = $submission->agent_id;
             $ref_number = $submission->ref_number;
             StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been Denied");
+            $applicantName=$submission->first_name.$submission->last_name;
+            $applicationid=$submission->id;
+            $data = [
+
+                    'applicantName' => $applicantName,
+                    'applicationid'=>$applicationid,
+
+
+
+            ];
+            $pdf = \PDF::loadView('emails.notification_denied', $data);
+            $user = Auth::user();
+
+            Notification::send($user, new Denied($data, $pdf));
+        }
+
+        $newStatus = $validated['risk_level'];
+        //Accept
+        if ($newStatus == 2  ) {
+
+
+
+            $risk = $submission->risk_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$risk,"1"], "Application".$ref_number. "Risk Level has been set to:Low risk");
 
         }
+
+        $newStatus = $validated['risk_level'];
+        //Accept
+        if ($newStatus == 3 ) {
+
+
+
+            $risk = $submission->risk_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$risk,"1"], "Application".$ref_number. "Risk Level has been set to:Medium risk");
+
+        }
+
+        $submission->update($validated);
 
         TestTable::where('principle_applicant_id', $id)
         ->where('type_of_applicant', '!=', 4)

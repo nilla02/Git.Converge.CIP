@@ -6,19 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
 
 class phase1 extends Notification
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     /**
      * Create a new notification instance.
-     */ protected $application,$full_name;
+     */ protected $application,$full_name, $application_logo;
 
     public function __construct($application)
     {
         $this->application = $application;
         $this->full_name = $this->application->first_name.' '.$this->application->first_name;
+        $this->ref_number=$this->application->ref_number;
     }
 
     /**
@@ -28,7 +30,7 @@ class phase1 extends Notification
      */
     public function via($notifiable): array
     {
-        return ['database', ];
+        return ['database','mail' ];
     }
 
     /**
@@ -36,11 +38,17 @@ class phase1 extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+
         return (new MailMessage)
-            ->greeting('Hello,')
-            ->line('The you have successfully created a new application for '.$this->full_name)
-            ->action('View dashboard', url('/home'))
-            ->line('Thank you for using our application!');
+        // ->markdown('emails.application-created', [
+        //     'ref_number' => $this->ref_number,
+
+        // ])  ->subject('New Application Created: ' . $this->full_name);
+        ->greeting('Hello,')
+        ->line('The application '.$this->ref_number,"has been succefully created and added in a queue.")
+        ->line('A Subsequent Email will be sent when the application begins processing.')
+        ->action('View dashboard', url('/home'))
+        ->line('Thank you for using our application!');
     }
 
     /**

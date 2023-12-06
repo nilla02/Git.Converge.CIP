@@ -16,7 +16,7 @@ export default function Edit({ auth, users, roles ,days,notifications,count}) {
     const [selectedCriteriadays, setSelectedCriteriadays] = useState(''); // Initialize with a default value
     const [selectedCriterialaw, setSelectedCriterialaw] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
-const usersPerPage = 20; // Adjust the number of users per page as needed
+const usersPerPage = 5; // Adjust the number of users per page as needed
 
 
   // Function to handle page change
@@ -145,6 +145,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
         ],
         due_diligence_officer: [
             "ref_number",
+            "co_notes",
             "First Name",
             "Last Name",
             "Status",
@@ -171,6 +172,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "ddo_notes",
         ],
         website_admin: [
+            "ref_number",
             "First Name",
             "Last Name",
             "Status",
@@ -228,7 +230,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
             "ceo_notes",
         ],
     };
-
+    console.log(users.country_id)
     const isColumnVisible = (columnName) => {
         const userRole = auth.user.roles[0]?.name;
 
@@ -260,7 +262,7 @@ const usersPerPage = 20; // Adjust the number of users per page as needed
                                                <select
                                                value={selectedCriteriadays}
                                                onChange={(e) => setSelectedCriteriadays(e.target.value)}
-                                               className="ml-2 text-white text-bold p-2 border bg-cyan-900 rounded-lg"
+                                               className="ml-2 mr-2 text-white text-bold p-2 border bg-cyan-900 rounded-lg"
                                              >
                                                <option value="">Application Duration Filter</option>
                                                <option value="90">90 Days</option>
@@ -322,9 +324,7 @@ Pending Review</option>
     {/* Add more criteria options as needed */}
   </select>)}
 
-  <Excel users={users}
-  />
-                                    <input
+                             <input
                                         type="text"
                                         placeholder="Search..."
                                         value={searchQuery}
@@ -335,11 +335,16 @@ Pending Review</option>
                                     />
                                                                      <PrimaryButton
                         type="submit"
-                        className=" py-2 flex-1 ml-4 font-bold text-white bg-black rounded"
+                        className=" py-2 flex-1 ml-4 w-200 font-bold text-white bg-black rounded"
                         onClick={performFilter}
                     >
                     Search
                     </PrimaryButton>
+
+
+                    <Excel users={users}
+  />
+
                                 </div>
                                 <table className="w-full text-sm text-left text-black">
                                     <thead className="text-xs  uppercase bg-white  border-2 text-cyan-600">
@@ -357,7 +362,7 @@ Pending Review</option>
                                                     scope="col"
                                                     className="py-3 px-6 text-left"
                                                 >
-                                                   Reference_number
+                                                   Reference number
                                                 </th>
                                             )}
                                             {isColumnVisible("First Name") && (
@@ -501,7 +506,7 @@ Pending Review</option>
                                                     </td>
                                                 )}
                                                       {isColumnVisible(
-                                                    "id"
+                                                    "ref_number"
                                                 ) && (
                                                     <td className="px-6 py-4">
                                                         {user.ref_number}
@@ -670,7 +675,7 @@ Pending Review</option>
                                                 )}
                                                 {isColumnVisible("AOF") && (
                                                     <td className="px-6 py-4">
-                                                    {user.i}
+                                                    {user.id}
                                                     </td>
                                                 )}
                                                   {isColumnVisible(

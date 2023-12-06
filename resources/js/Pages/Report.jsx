@@ -111,54 +111,7 @@ document.getElementById(key).value=value
                                 {index === 0 && (
                                     <div>
                                         <div className="q">
-                                            <div className="flex">
-                                                <div className="flex-1">
-                                                <InputLabel
-                                            className=""
-                                htmlFor="Start Date"
-                                value="Start Date"
-                            />
-                                            <input
 
-                                                type="date"
-                                                id="start_date"
-                                                className=" rounded mt-1 block w-full"
-                                                onChange={(e) =>
-                                                    handleFilterChange(
-                                                        "start_date",
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
-                                            </div>
-                                            <div className="flex-1">
-                                            <InputLabel
-                                            className=""
-                                htmlFor="End Date"
-                                value="End Date"
-                            />
-                                                <input
-                                                 id="end_date"
-                                                    type="date"
-                                                    className=" rounded mt-1 lg:ml-2 block w-full"
-                                                    onChange={(e) =>
-                                                        handleFilterChange(
-                                                            "end_date",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="flex-1">
-                                            <PrimaryButton
-                        type="submit"
-                        className=" py-2 flex-1 mt-[27px] ml-4 font-bold text-white bg-black rounded"
-                        onClick={performFilter}
-                    >
-                      Save
-                    </PrimaryButton>
-                                            </div>
-                                            </div>
 
                                             <div className="">
                                                 <div class="lg:grid  lg:grid-cols-4  lg:gap-4 sm:grid  sm:grid-cols-1  sm:gap-4">
@@ -400,7 +353,54 @@ document.getElementById(key).value=value
                                                 </div>
                                             </div>
                                         </div>
+                                        <div className="flex">
+                                                <div className="flex-1">
+                                                <InputLabel
+                                            className=""
+                                htmlFor="Start Date"
+                                value="Start Date"
+                            />
+                                            <input
 
+                                                type="date"
+                                                id="start_date"
+                                                className=" rounded mt-1 block w-full"
+                                                onChange={(e) =>
+                                                    handleFilterChange(
+                                                        "start_date",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                            </div>
+                                            <div className="flex-1">
+                                            <InputLabel
+                                            className=""
+                                htmlFor="End Date"
+                                value="End Date"
+                            />
+                                                <input
+                                                 id="end_date"
+                                                    type="date"
+                                                    className=" rounded mt-1 lg:ml-2 block w-full"
+                                                    onChange={(e) =>
+                                                        handleFilterChange(
+                                                            "end_date",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="flex-1">
+                                            <PrimaryButton
+                        type="submit"
+                        className=" py-2 flex-1 mt-[27px] ml-4 font-bold text-white bg-black rounded"
+                        onClick={performFilter}
+                    >
+                      Save
+                    </PrimaryButton>
+                                            </div>
+                                            </div>
                                     </div>
                                 )}
                                 {index === 1 && (

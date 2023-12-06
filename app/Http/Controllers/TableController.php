@@ -3,7 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\TestTable;
+use App\Models\Risk_level;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
+use App\Models\Country;
+use App\Models\Region;
+use App\Models\Gender;
+use App\Notifications\phase1;
+use App\Events\FormSuccessfullyCreatedEvent;
+use App\Events\StatusChangedEvent;
+use App\Models\Applicant_Type;
+use App\Models\MaritualStatus;
+use App\Models\Type_of_investment;
+use Spatie\Activitylog\Models\Activity;
+use GuzzleHttp\Exception\BadResponseException;
+use Illuminate\Pagination\Paginator;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
+use App\Mail\ApplicationCreated;
+use App\Events\MessageReceived;
+use Illuminate\Support\Facades\Mail; // Add this line
+use App\Notifications\Granted;
+use App\Notifications\DWCause;
+use App\Notifications\DefaultNotify;
 class TableController extends Controller
 {
     public function index(Request $request)
@@ -29,30 +54,25 @@ if ($request->days){
 $query->where('created_at','<=',$date);
             })
             ->when(in_array('agents', $roles), function ($query) use ($user) {
-                $query->where('agent_id', $user->id)->where('type_of_applicant', '2')->orWhere('status_id', '8')->orWhere('status_id', '12')
-                ->orWhere('status_id', '13')->orWhere('status_id', '19')->orWhere('status_id', '20');
+                $query->where('agent_id', $user->id);
             })
             ->when(in_array('due_diligence_officer', $roles), function ($query) use ($user) {
-                $query->where('ddo_id', $user->id)->where('status_id', '2')->orWhere('status_id', '3')->orWhere('status_id', '4');
+                $query->where('ddo_id', $user->id);
             })
             ->when(in_array('promoter', $roles), function ($query) use ($user) {
                 $query->where('promoter_id', $user->id);
             })
             ->when(in_array('accountant', $roles), function ($query) use ($user) {
                 // $query->where('acc_id', $user->id)->where('SendtoAcc', $user->id);
-                $query->where('acc_id', $user->id)->where('type_of_applicant', '2');
+                $query->where('acc_id', $user->id);
             })
 
             ->when(in_array('corp_sec', $roles), function ($query) use ($user) {
-                $query->where('status_id', '5')
-                    ->where('accounts_approval', 'yes')
-                    ->orWhere('status_id', '9')
-                    ->orWhere('status_id', '27')
-                    ->orWhere('status_id', '23');
+
             })
 
             ->when(in_array('risk_assessment_officer', $roles), function ($query) use ($user) {
-                $query->where('ddo_id', $user->id)->where('status_id', '2')->orWhere('status_id', '3')->orWhere('status_id', '4');
+                $query->where('risk_id', $user->id);
             })
             ->when(in_array('admin_due_diligence_officer', $roles), fn (Builder $query, $topic) => $query->where('status_id', 'pre-processing_accept'))
 
@@ -60,27 +80,20 @@ $query->where('created_at','<=',$date);
             ->when(
                 in_array('ceo', $roles),
                 fn ($query) => $query->where(function ($query) {
-                    $query->where('status_id', 'SendtoCEO')
-                        ->orWhere('status_id', 'pending_review')
-                        ->orWhere('status_id', 'pre_processing_accept')
-                        ->orWhere('status_id', 'non_Compliant')
-                        ->orWhere('status_id', 'decision_pending')
-                        ->orWhere('status_id', 'delayed_with_cause');
+
                 })
             )
 
             ->when(
                 in_array('processing', $roles),
                 fn ($query) => $query->where(function ($query) {
-                    $query->where('status_id', '32')
-                        ->orWhere('status_id', '33');
+
 
                 })
             )
 
-            ->when(in_array('compliance_officer', $roles), fn (Builder $query, $topic) => $query->where('status_id', '17')
-            ->orWhere('status_id', '10')
-            ->orWhere('status_id', '22')
+            ->when(in_array('compliance_officer', $roles), fn (Builder $query, $topic) =>  $query->where('co_id', $user->id)
+
 
 
 

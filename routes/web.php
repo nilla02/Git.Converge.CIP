@@ -41,6 +41,8 @@ Route::get('/', function () {
 //routes
 // route::get('/home',[RoleController::class,'index2']);
 
+// routes/web.php or routes/api.php
+Route::post('/send-email', [TestTableController::class, 'store'])->name('TestTable.store');
 
 Route::put('/user/{id}/edit', [UserController::class, 'update'])->name('user.update');
 Route::get('/user/{id}/edit', [UserController::class, 'show'])->name('user.show');
@@ -66,8 +68,9 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::prefix('/dashboard')->middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/submissions', [TestTableController::class, 'index'])->name('Draft');
+    Route::get('/App_Table', [TableController::class, 'index'])->name('ApplicationTable');
     Route::get('/submissions/{id}/edit', [TestTableController::class, 'show'])->name('submission.show');
     Route::get('Commission/submissions/{id}/edit', [TestTableController::class, 'show2'])->name('submission.show2');
     Route::put('/submissions/{id}/edit', [TestTableController::class, 'update'])->name('submission.update');

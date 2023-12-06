@@ -11,7 +11,7 @@ class FormTable extends Model
     protected $table = 'form_table'; // Set the table name
 
     protected $fillable = [
-    'SL1_file_path',   
+    'SL1_file_path',
        'Sl2_file_path',
        'Sl3_file_path',
         // Add more fields as needed

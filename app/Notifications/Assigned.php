@@ -6,9 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Events\FormSuccessfullyCreatedEvent;
 
-class FormSuccessfullyCreated extends Notification implements ShouldQueue
+class Assigned extends Notification
 {
     use Queueable;
 
@@ -19,6 +18,7 @@ class FormSuccessfullyCreated extends Notification implements ShouldQueue
     public function __construct($application)
     {
         $this->application = $application;
+        $this->ref = $this->application->ref_number;
         $this->full_name = $this->application->first_name.' '.$this->application->first_name;
     }
 
@@ -39,7 +39,7 @@ class FormSuccessfullyCreated extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->greeting('Hello,')
-            ->line('The you have successfully created a new application for '.$this->full_name)
+            ->line('The application '.$this->ref,"has been added to your assignment queue")
             ->action('View dashboard', url('/home'))
             ->line('Thank you for using our application!');
     }
@@ -51,12 +51,10 @@ class FormSuccessfullyCreated extends Notification implements ShouldQueue
      */
     public function toArray($notifiable): array
     {
-            // Broadcast the event
-            FormSuccessfullyCreatedEvent::dispatch($this->full_name);
-            // event(new FormSuccessfullyCreatedEvent('The application was successfully created for ' . $this->full_name));
+
 
             return [
-                'data' => 'The application was successfully created for ' . $this->full_name,
+                'data' => 'The application'. $this->ref. 'was successfully created and assign to your queue',
         ];
     }
 }

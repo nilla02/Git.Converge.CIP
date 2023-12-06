@@ -26,7 +26,7 @@ export default function Authenticated({
     useEffect(() => {
         console.log(user.id);
         Echo.private(`user.${user.id}.applications`).listen('FormSuccessfullyCreatedEvent', (e)=> {
-            toast.success(`New Form Successfully Created: ${e.message}`);
+            toast.success(` ${e.message}`);
 
         })
         Echo.private(`user.${user.id}.granted`).listen('StatusChangedEvent', (e)=> {
