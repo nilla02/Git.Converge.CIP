@@ -30,19 +30,28 @@
             font-size: 14px;
             font-style: italic;
         }
+        .logo{
+
+text-align: right;
+        }
+
     </style>
 </head>
 
 <body>
+    <div class="logo">
+        <img style="margin-left: auto; display: block;" src="{{ public_path().'/logo-min.png' }}" alt="Logo Image">
+        <span style=" display: block;">{{ $date }}</span>
+      </div>
     <address>
-        [Applicant Name]<br>
+        {{ $applicantName }}<br>
         [Address Line 1]<br>
         [Address Line 2]
     </address>
 
-    <h2>Dear [Applicant Name],</h2>
+    <h2>Dear   {{ $applicantName }},</h2>
 
-    <p><strong>NOTIFICATION LETTER – APPLICANT(S) NAME(S)</strong></p>
+    <p><strong>NOTIFICATION LETTER – {{ $applicantName }}</strong></p>
 
     <p>
         We are pleased to inform you that your application for citizenship by means of an investment in the purchase of a non-interest-bearing Saint Lucia Government Bond in accordance with the National Savings and Development Bonds Act, Cap. 15.25 has been granted.
@@ -69,6 +78,28 @@
 
     <p>The Bond is to be registered and remain in your name.</p>
 
+    <table style="width:100%">
+        <tbody>
+        <tr>
+            <td>
+
+        <p>Citizenship by Investment Unit</p>
+            <p>5 th Floor, Francis Compton Building</p>
+            <p>Waterfront, Castries, Saint Lucia, West Indies, LC04 301</p>
+
+            <p> 1-758-458-6050</p>
+            <p> cipsaintlucia.com</p>
+            </td>
+            <td style="text-align:right;">
+                <img style="width:150px; height:150px" src="{{public_path().'/images/logo2.png'}}" >
+            </td>
+        <tr>
+    </tbody>
+    </table>
+    <br>
+    <div class="logo">
+        <img style="margin-left: auto; display: block;" src="{{ public_path().'/logo-min.png' }}" alt="Logo Image">
+      </div>
     <p><strong>The Redemption of Bond at Maturity of Holding Period shall be as follows:</strong></p>
 
     <ul>
@@ -83,13 +114,14 @@
     </p>
 
     <footer>
+        <img style="width:150px; height:150px" src="{{public_path().'/images/stamp1.png'}}" >
         <p>Regards,</p>
         <p>Mc Claude Emmanuel</p>
         <p>Chief Executive Officer</p>
     </footer>
 
     <p>Cc: Authorised Agent</p>
-    <p>Application # Application Number</p>
+    <p>Application #   {{$applicationid}}</p>
 </body>
 
 </html>

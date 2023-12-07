@@ -106,6 +106,10 @@ class UserSeeder extends Seeder
             if ($adminRole) {
                 $user->assignRole($adminRole);
             }
+
+
         }
+
+
 }
 

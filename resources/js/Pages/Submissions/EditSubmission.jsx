@@ -79,7 +79,7 @@ const fields = {
             { value: 16, label: "Rejected" },//change from ddo to ceo
             {
                 value: 17,
-                label: "Process Law Enforcement",
+                label: "Submit Application",
             },//back ground chekc underway
 
             { value: 18, label: "Draft Assigned" },
@@ -139,6 +139,18 @@ const fields = {
         label: "Region",
         label: "Region",
         field: "region",
+        type: "text",
+    },
+    citizenship_certificate_id:{
+        roles: [
+
+            "processing",
+            "website_admin",
+            "ceo",
+
+        ],
+        label: "COR",
+        field: "input",
         type: "text",
     },
     type_of_applicant: {
@@ -241,7 +253,7 @@ const fields = {
         type: "text",
     },
 
-    Registration_application_path: {
+    registration_application_path: {
         roles: [
             "agents",
             "compliance_officer",
@@ -304,21 +316,10 @@ const fields = {
 
         ],
         label: "Addition Files",
-        field: "file",
+        field: "xfile",
         type: "text",
     },
-    citizenship_certificate_id:{
-        roles: [
 
-            "processing",
-            "website_admin",
-            "ceo",
-
-        ],
-        label: "COR",
-        field: "input",
-        type: "text",
-    },
     sworn_affidavit_spouse_path: {
         roles: [
             "agents",
@@ -586,7 +587,7 @@ const fields = {
         type: "text",
     },
 
-    copy_of_parent_id_path: {
+    professional_certificate_translator_path: {
         roles: [
             "agents",
             "compliance_officer",
@@ -594,12 +595,12 @@ const fields = {
             "ceo",
             "promoter",
         ],
-        label: "Military Record",
+        label: "Professional certificate translator",
         field: "file",
         type: "text",
     },
 
-    copy_of_parent_id_path: {
+    apostille_path: {
         roles: [
             "agents",
             "compliance_officer",
@@ -612,7 +613,7 @@ const fields = {
         type: "text",
     },
 
-    copy_of_parent_id_path: {
+    professional_certificate_notary_path: {
         roles: [
             "agents",
             "compliance_officer",
@@ -625,19 +626,127 @@ const fields = {
         type: "text",
     },
 
-    copy_of_parent_id_path: {
+    professional_certificate_attorney_path: {
         roles: ["agents", "compliance_officer", "website_admin", "promoter"],
         label: "Professional and Academic Certificates",
         field: "file",
         type: "text",
     },
 
-    copy_of_parent_id_path: {
+
+    professional_certificate_oaths_commissioner_path: {
         roles: ["agents", "compliance_officer", "website_admin", "promoter"],
         label: "Official Transcripts from Educational Institution",
         field: "file",
         type: "text",
     },
+
+    net_worth_document_support_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Net worth document",
+        field: "file",
+        type: "text",
+    },
+	proof_of_payment_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Proof of payment",
+        field: "file",
+        type: "text",
+    },
+    sworn_affidavit_financial_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Sworn Affidavit Financial",
+        field: "file",
+        type: "text",
+    },
+    sworn_affidavit_spouse_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Sworn Affidavit Spouse",
+        field: "file",
+        type: "text",
+    },
+    academic_certificates_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Academic Certificates",
+        field: "file",
+        type: "text",
+    },
+    military_records_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Military Records",
+        field: "file",
+        type: "text",
+    },
+    curriculum_vitae_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Curriculum vitae",
+        field: "file",
+        type: "text",
+    },
+    professional_reference_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Professional reference",
+        field: "file",
+        type: "text",
+    },
+    bank_reference_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Bank reference",
+        field: "file",
+        type: "text",
+    },
+    sworn_affidavit_financial_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Sworn affidavit financial",
+        field: "file",
+        type: "text",
+    },
+
+    ceo_assessment_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Chief Operating Officer assessment",
+        field: "file",
+        type: "text",
+    },
+    co_assessment_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Verification Assessment",
+        field: "file",
+        type: "text",
+    },
+    proof_of_investment_transferred_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Proof of investment transferred",
+        field: "file",
+        type: "text",
+    },
+    co_agent_notes: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Agent co_notes ",
+        field: "comment",
+        type: "text",
+    },
+    ceo_agent_notes: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Chief Operating Officer Agent notes",
+        field: "comment",
+        type: "text",
+    },
+    certified_copy_professional_certificate_medical_examiner_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Professional Medical examinar certificate",
+        field: "file",
+        type: "text",
+    },
+    agent_investment_notes:{
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Agent investment notes",
+        field: "comment",
+        type: "text",
+    },
+
+
+
   addon: {
         roles: ["agents", "compliance_officer", "website_admin", "promoter"],
         label: "Addons",
@@ -671,8 +780,8 @@ export default function EditSubmissions({
     } = useForm({
         ...submission,
     });
-    console.log(auth);
 
+console.log("Submission",submission)//submission
     function handleFileChange(key, e) {
         const files = e.target.files
         setData(key,files.length>1?files:files[0]);
@@ -687,7 +796,7 @@ return value.map(x=>(
         <li>
             <a href={x} target="_blank" rel="noopener noreferrer">
             <span style={{textDecoration: 'underline', color:'blue'}}>{x}</span>
-            </a> - <button onClick={(e) => {e.preventDefault(); console.log('hehehehheeh') }} >Delete</button>
+            </a> - <button onClick={(e) => {e.preventDefault();  }} >Delete</button>
         </li>
 
         ))
@@ -708,7 +817,7 @@ return value.map(x=>(
             preserveScroll: true,
             // onSuccess: () => reset(),
             onError: (errors) => {
-                console.log(errors);
+
             },
         });
     }
@@ -727,12 +836,11 @@ return value.map(x=>(
     const genField = (key) => {
         const field = fields[key];
         const userRole = auth.user.role_names[0] || "0";
-console.log(data.ddo.name)
+
 
         if (field.roles && !field.roles.includes(userRole)) {
             return <div key={key}></div>;
         }
-
 
         if (field.field === "country") {
             return (
@@ -740,14 +848,14 @@ console.log(data.ddo.name)
                     <InputLabel htmlFor={key} value={field.label} />
                     <select
                         className="w-full rounded"
-                        value={data.country_id || ""} // Set the default value to the stored country ID
+                        value={data.country_id} // Set the default value to the stored country ID
                         onChange={(e) => setData("country_id", e.target.value)}
                     >
-                        <option value="" disabled>
+                        <option value="" >
                             Select a country
                         </option>
                         {country.map((user) => (
-                            <option key={user.id} value={user.code}>
+                            <option key={user.id} value={user.id}>
                                 {user.name}
                             </option>
                         ))}
@@ -946,7 +1054,7 @@ console.log(data.ddo.name)
 
             // If the user role is "agents", filter the options
             if (userRole === "agents") {
-                const allowedStatuses = [12,13,10,17,20];
+                const allowedStatuses = [12,17,28];
                 filteredOptions = field.options.filter((option) =>
                     allowedStatuses.includes(option.value)
                 );
@@ -1047,33 +1155,51 @@ console.log(data.ddo.name)
                 const handleDrop = (e) => {
                     e.preventDefault();
                     const droppedFile = e.dataTransfer.files[0];
-                    handleFileChange(key, { target: { files: [droppedFile] } });
+
+                    // Check if the dropped file type is allowed
+                    if (isFileAllowed(droppedFile)) {
+                        handleFileChange(key, { target: { files: [droppedFile] } });
+                    } else {
+                        // Handle file type not allowed
+
+                    }
+                };
+
+                const isFileAllowed = (file) => {
+                    const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
+                    return allowedTypes.includes(file.type);
                 };
 
                 return (
                     <div key={key}>
                         <div className="mb-0">
-                            <InputLabel htmlFor={key} value={field.label} />
+                            <label htmlFor={key}>{field.label}</label>
                             <div
                                 className="relative"
                                 onDrop={handleDrop}
                                 onDragOver={(e) => e.preventDefault()}
                             >
-                                {val && val.type === "application/pdf" ? (
-                                    <embed
-                                        src={URL.createObjectURL(val)}
-                                        type="application/pdf"
-                                        width="100%"
-                                        height="500px"
-                                    />
+                                {val && (val.type === "application/pdf" || val.type.startsWith("image/")) ? (
+                                    val.type === "application/pdf" ? (
+                                        <embed
+                                            src={URL.createObjectURL(val)}
+                                            type="application/pdf"
+                                            width="100%"
+                                            height="500px"
+                                        />
+                                    ) : (
+                                        <img
+                                            src={URL.createObjectURL(val)}
+                                            alt="Uploaded File"
+                                            style={{ maxWidth: "100%", maxHeight: "500px" }}
+                                        />
+                                    )
                                 ) : (
                                     <div
                                         className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer"
                                         onClick={() =>
                                             document
-                                                .querySelector(
-                                                    `input[name="${key}"]`
-                                                )
+                                                .querySelector(`input[name="${key}"]`)
                                                 .click()
                                         }
                                         onDragOver={(e) => e.preventDefault()}
@@ -1089,9 +1215,7 @@ console.log(data.ddo.name)
                                             type="file"
                                             className="hidden"
                                             name={key}
-                                            onChange={(e) =>
-                                                handleFileChange(key, e)
-                                            }
+                                            onChange={(e) => handleFileChange(key, e)}
                                         />
                                     </div>
                                 )}
@@ -1103,11 +1227,11 @@ console.log(data.ddo.name)
             }
 
             return (
-                <div>
-                    <InputLabel htmlFor={key} value={field.label} />
-                  <a href={val} target="_blank" rel="noopener noreferrer">
-        View File
-    </a>{" "}
+                <div className="">
+                    <label htmlFor={key}>{field.label}</label>
+                    <a className="ml-2 text-blue-500 rounded-sm" href={val} target="_blank" rel="noopener noreferrer">
+                        View File
+                    </a>{" "}
                     <button
                         type="button"
                         onClick={() => handleFileDelete(key)}
@@ -1118,6 +1242,8 @@ console.log(data.ddo.name)
                 </div>
             );
         }
+
+
         if (field.field === "xfile") {
             const val = data[key];
 
@@ -1186,6 +1312,7 @@ console.log(data.ddo.name)
                     <InputLabel htmlFor={key} value={field.label} />
                     <ul>
                     {displayfiles(val)}
+
 </ul>
 
 
@@ -1210,15 +1337,14 @@ console.log(data.ddo.name)
                                         Application form
                                     </h2>
 
-                                    <p className="mt-1 text-sm text-gray-600">
-                                        Enter Sign application form and edit
-                                        details of forms below.
+                                    <p className="mt-1 text-sm text-rose-600">
+                                       Insert the Documents required for application processing
                                     </p>
                                 </header>
-<header>
+<header className="mt-5">
     Princiciple applicant or Dependents
 </header>
-<table className="w-full text-sm text-left text-black">
+<table className="mt-2 w-full text-sm text-left text-black">
                         <thead className="text-xs    uppercase bg-gradient-to-b from-cyan-600  to-[#405160] dark:bg-gray-700 text-white">
                             <tr>
                                 <th scope="col" className="px-6 py-3">

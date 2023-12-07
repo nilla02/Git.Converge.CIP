@@ -1,5 +1,5 @@
 import ApplicationLogo from "@/Components/ApplicationLogo";
-export default function Guestnavbar(){
+export default function guestnavbar(){
 return(
 <div>
 

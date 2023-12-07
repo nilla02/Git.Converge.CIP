@@ -48,6 +48,7 @@ class Statuses extends Seeder
                 ['internal_title' => 'Granted - Oath Submitted', 'external_title' => 'Granted - Oath Processing'],
                 ['internal_title' => 'Granted - Pending COR', 'external_title' => 'Granted - Pending COR'],
                 ['internal_title' => 'Granted - Pending Law Enforcement ', 'external_title' => 'Granted - Pending Law Enforcement '],
+
             ];
             foreach ($statuses as $key => $value) {
                 Status_model::create($value);

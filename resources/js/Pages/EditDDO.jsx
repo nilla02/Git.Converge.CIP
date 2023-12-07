@@ -7,18 +7,18 @@ import { Link, useForm, usePage } from "@inertiajs/react";
 import AuthenticatedLayoutAA from '@/Layouts/AuthenticatedLayoutAA';
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
 
-export default function UpdateProfileInformation({ users,auth,submission}) {
+export default function UpdateProfileInformation({ users,auth,submission, notifications}) {
     const { data, setData, put, errors, processing } = useForm({
         first_name:submission.first_name,
         last_name: submission.last_name,
         Assigned_DDO:submission.Assigned_DDO,
     });
-  
+
 
     const updatePassword = (e) => {
         e.preventDefault();
 
-    
+
         put(route("EditDDO.assignddo", submission.id), {
             preserveScroll: true,
             onSuccess: () => reset(),
@@ -29,6 +29,7 @@ export default function UpdateProfileInformation({ users,auth,submission}) {
     };
     return (
         <AuthenticatedLayoutAA user={auth.user}
+        notifications={notifications}
         >
               <Authenticated user={auth.user} />
 
@@ -37,10 +38,10 @@ export default function UpdateProfileInformation({ users,auth,submission}) {
             </header>
 
             <main className="container mx-auto  m-20 py-8 lg:w-3/4 xl:w-2/3">
-              
+
               <section className="mb-8">
-                
-           
+
+
               <div className="p-4 sm:p-8 h- bg-white shadow sm:rounded-lg">
             <header>
                 <h2 className="text-lg font-medium text-gray-900">
@@ -98,7 +99,7 @@ export default function UpdateProfileInformation({ users,auth,submission}) {
 
 
 
-    
+
 
     <InputError message={errors['Assigned_DDO']} className="mt-2" />
 </div>
@@ -115,5 +116,5 @@ export default function UpdateProfileInformation({ users,auth,submission}) {
         </main>
         </AuthenticatedLayoutAA>
     );
-    
+
 }

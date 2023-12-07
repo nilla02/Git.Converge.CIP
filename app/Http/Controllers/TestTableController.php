@@ -31,6 +31,16 @@ use App\Notifications\DWCause;
 use App\Notifications\Denied;
 use App\Notifications\DefaultNotify;
 use App\Notifications\Assigned;
+use App\Notifications\PBO;
+use App\Notifications\RTC;
+use App\Notifications\RISKLEVEL;
+use App\Notifications\RW;
+use App\Notifications\phase2;
+use App\Notifications\ACCAP;
+use App\Notifications\RISK1;
+use App\Notifications\Processing;
+use App\Notifications\Submit;
+
 class TestTableController extends Controller
 {
     /**
@@ -53,15 +63,12 @@ if ($request->days){
         $roles = $user->getRoleNames()->toArray();
 
         $users = TestTable::query()
-        // ->with('status')
-
             ->when($date,function ($query) use ($date){
 $query->where('created_at','<=',$date);
             })
             ->when(in_array('agents', $roles), function ($query) use ($user) {
-                $query->where('agent_id', $user->id)->where('type_of_applicant', '2')->orWhere('status_id', '8')->orWhere('status_id', '12')
-                ->orWhere('status_id', '13')->orWhere('status_id', '19')->orWhere('status_id', '20');
-            })
+                $query->where('agent_id', $user->id)->where('type_of_applicant','2')->whereIn('status_id',['8','12','13','19','20','28']);
+        })
             ->when(in_array('due_diligence_officer', $roles), function ($query) use ($user) {
                 $query->where('ddo_id', $user->id)->where('type_of_applicant', '2')->where('status_id', '2')->orWhere('status_id', '3')->orWhere('status_id', '4');
             })
@@ -537,10 +544,10 @@ $notifications = auth()->user()->unreadNotifications;
 
         $TestTable->save();
 
-        FormSuccessfullyCreatedEvent::dispatch([Auth::id()], 'The Application created has been submitted and is now in the the queue.');
+        FormSuccessfullyCreatedEvent::dispatch([Auth::id()], 'The Application created has been DRAFT has been created.');
         FormSuccessfullyCreatedEvent::dispatch([$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id,],'The application '.$TestTable->ref_number."has been added to your assignment queue");
-Auth::user()->notify(new phase1($TestTable));
-$userIds = [Auth::id(),$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id];
+        Auth::user()->notify(new phase1($TestTable));
+$userIds = [$ddo_to_sign->id, $ceo_to_sign->id, $co_to_sign->id, $acc_to_sign->id, $risk_to_sign->id];
 
 // Find user models based on the provided IDs
 $users = User::find($userIds);
@@ -573,9 +580,12 @@ $risk=Risk_level::all();
         $gender = Gender::all();
         $mstatus = MaritualStatus::all();
         $toi = Type_of_investment::all();
+        $agent=$submission->agent_id;
         if (Auth::user()->id == $submission->co_id && !$submission->open_at) {
 
             $submission->update(['open_at' => Carbon::now()]);
+            $user = User::find( $agent);
+            $user->notify(new Processing($submission));
         }
         $notifications = auth()->user()->unreadNotifications;
 
@@ -609,6 +619,7 @@ $risk=Risk_level::all();
             $query->where('name', 'compliance_officer');
         })->get();
         $submission = TestTable::findOrFail($id);
+        $notifications = auth()->user()->unreadNotifications;
         return Inertia::render('EditCO', ['submission' => $submission, 'users' => $users,'notifications'=>$notifications]);
     }
     /**
@@ -621,164 +632,6 @@ $risk=Risk_level::all();
     {
 
         $submission = TestTable::findOrFail($id);
-        $validated = $request->validate([
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'status' => ['required'],
-            'Payment_Amount' => 'nullable',
-            'Date_Of_Payment' => 'nullable',
-            'document_checklist_path' => 'nullable',
-            'open_at' => 'nullable',
-            'ddo_notes' => 'nullable',
-            'risk_level'=>'nullable',
-            'co_notes' => 'nullable',
-            'Assigned_DDO' => 'nullable',
-            'Assigned_Compliance' => 'nullable',
-            'authorized_agent_form_path' => 'nullable',
-            'proof_of_payment_path' => 'nullable',
-            'confirmation_form_path' => 'nullable',
-            'registration_application_path' => 'nullable',
-            'birth_record_path' => 'nullable',
-            'name_change_path' => 'nullable',
-            'citizenship_certificate_path' => 'nullable',
-            'residence_card_path' => 'nullable',
-            'military_records_path' => 'nullable',
-            'photograph_certificate_path' => 'nullable',
-            'national_id_path' => 'nullable',
-            'current_passport_pages_path' => 'nullable',
-            'proof_of_residence_path' => 'nullable',
-            'marriage_certificate_path' => 'nullable',
-            'divorce_decree_path' => 'nullable',
-            'curriculum_vitae_path' => 'nullable',
-            'professional_reference_path' => 'nullable',
-            'bank_reference_path' => 'nullable',
-            'sworn_affidavit_financial_path' => 'nullable',
-            'sworn_affidavit_spouse_path' => 'nullable',
-            'academic_certificates_path' => 'nullable',
-            'police_certificates_path' => 'nullable',
-            'visas_path' => 'nullable',
-            'medical_examiner_declaration_path' => 'nullable',
-            'official_transcripts_path' => 'nullable',
-            'custody_records_path' => 'nullable',
-            'statutory_declaration_path' => 'nullable',
-            'copy_of_parent_id_path' => 'nullable',
-            'passport_sized_photos_path' => 'nullable',
-            'ddo_assessment_path' => 'nullable',
-            'ceo_assessment_path' => 'nullable',
-            'co_assessment_path' => 'nullable',
-            'law_enforcement_sent'=>'nullable',
-            'proof_of_investment_transferred_path' => 'nullable',
-            'proof_of_investment_path' => 'nullable',
-            'certified_copy_professional_certificate_medical_examiner_path' => 'nullable',
-            'net_worth_document_support_path' => 'nullable',
-            'professional_certificate_translator_path' => 'nullable',
-            'apostille_path' => 'nullable',
-            'professional_certificate_notary_path' => 'nullable',
-            'professional_certificate_attorney_path' => 'nullable',
-            'professional_certificate_oaths_commissioner_path' => 'nullable',
-
-        ]);
-        $patharray = [
-            'file_path',
-            'proof_of_payment_path',
-            'document_checklist_path',
-            'authorized_agent_form_path',
-            'alternative_citizenship_path',
-            'confirmation_form_path',
-            'registration_application_path',
-            'birth_record_path',
-            'name_change_path',
-            'citizenship_certificate_path',
-            'residence_card_path',
-            'military_records_path',
-            'photograph_certificate_path',
-            'national_id_path',
-            'current_passport_pages_path',
-            'proof_of_residence_path',
-            'marriage_certificate_path',
-            'divorce_decree_path',
-            'curriculum_vitae_path',
-            'professional_reference_path',
-            'bank_reference_path',
-            'sworn_affidavit_financial_path',
-            'sworn_affidavit_spouse_path',
-            'academic_certificates_path',
-            'police_certificates_path',
-            'visas_path',
-            'medical_examiner_declaration_path',
-            'official_transcripts_path',
-            'custody_records_path',
-            'statutory_declaration_path',
-            'copy_of_parent_id_path',
-            'passport_sized_photos_path',
-            'ddo_assessment_path',
-            'ceo_assessment_path',
-            'co_assessment_path',
-            'proof_of_investment_transferred_path',
-            'proof_of_investment_path',
-            'certified_copy_professional_certificate_medical_examiner_path',
-            'net_worth_document_support_path',
-            'professional_certificate_translator_path',
-            'apostille_path',
-            'professional_certificate_notary_path',
-            'professional_certificate_attorney_path',
-            'professional_certificate_oaths_commissioner_path',
-        ];
-        $userId = Auth::id();
-        $tableId = $submission->id;
-        $ref_number=$submission->ref_number;
-        $userGroup = Auth::user()->group;
-        foreach ($patharray as $value) {
-            if ($request->hasFile($value)) {
-                $file = $request->file($value);
-                $validated[$value] = time() . '.' . $file->extension();
-                $file->move(storage_path('app/media/' . $userGroup . '/' . $ref_number . '/' . $tableId), $validated[$value]);
-            } else {
-                unset($validated[$value]);
-            }
-        }
-        $submission->update($validated);
-        return redirect()->route('Draft');
-    }
-
-    public function assignddo(Request $request, string $id)
-    {
-
-        $submission = TestTable::findOrFail($id);
-        $validated = $request->validate([
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'Assigned_DDO' => 'nullable',
-
-        ]);
-
-
-        $submission->update($validated);
-        return redirect()->route('Draft');
-    }
-
-    public function assignco(Request $request, string $id)
-    {
-
-        $submission = TestTable::findOrFail($id);
-        $validated = $request->validate([
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'Assigned_Compliance' => 'nullable',
-
-        ]);
-
-        $submission->update($validated);
-        return redirect()->route('Draft');
-    }
-
-
-    public function update(Request $request, string $id)
-    {
-
-        $submission = TestTable::findOrFail($id);
-
-        $tableId = $submission->id;
 
         $validated = $request->validate([
             'first_name' => ['required'],
@@ -788,6 +641,7 @@ $risk=Risk_level::all();
             'law_enforcement_sent'=>'nullable',
             'ddo_notes' => 'nullable',
             'open_at' => 'nullable',
+            'agent_investment_notes'=>'nullable',
             'citizenship_certificate_id'=>'nullable',
             'accounts_approval'=>'nullable',
             'co_notes' => 'nullable',
@@ -870,6 +724,176 @@ $risk=Risk_level::all();
             'academic_certificates_path',
             'police_certificates_path',
             'visas_path',
+            'law_enforcement_report_path',
+            'medical_examiner_declaration_path',
+            'official_transcripts_path',
+            'custody_records_path',
+            'statutory_declaration_path',
+            'copy_of_parent_id_path',
+            'passport_sized_photos_path',
+            'ddo_assessment_path',
+            'ceo_assessment_path',
+            'co_assessment_path',
+            'proof_of_investment_transferred_path',
+            'proof_of_investment_path',
+            'certified_copy_professional_certificate_medical_examiner_path',
+            'net_worth_document_support_path',
+            'professional_certificate_translator_path',
+            'apostille_path',
+            'professional_certificate_notary_path',
+            'professional_certificate_attorney_path',
+            'professional_certificate_oaths_commissioner_path',
+            'addon',
+        ];
+
+        $userId = Auth::id();
+        $tableId = $submission->id;
+        $ref_number=$submission->ref_number;
+        $userGroup = Auth::user()->group;
+        foreach ($patharray as $value) {
+            if ($request->hasFile($value)) {
+                $file = $request->file($value);
+                $validated[$value] = time() . '.' . $file->extension();
+                $file->move(storage_path('app/media/' . $userGroup . '/' . $ref_number . '/' . $tableId), $validated[$value]);
+            } else {
+                unset($validated[$value]);
+            }
+        }
+        $submission->update($validated);
+        return redirect()->route('Draft');
+    }
+
+    public function assignddo(Request $request, string $id)
+    {
+
+        $submission = TestTable::findOrFail($id);
+        $validated = $request->validate([
+            'first_name' => ['required'],
+            'last_name' => ['required'],
+            'Assigned_DDO' => 'nullable',
+
+        ]);
+
+
+        $submission->update($validated);
+        return redirect()->route('Draft');
+    }
+
+    public function assignco(Request $request, string $id)
+    {
+
+        $submission = TestTable::findOrFail($id);
+        $validated = $request->validate([
+            'first_name' => ['required'],
+            'last_name' => ['required'],
+            'Assigned_Compliance' => 'nullable',
+
+        ]);
+
+        $submission->update($validated);
+        return redirect()->route('Draft');
+    }
+
+
+    public function update(Request $request, string $id)
+    {
+
+        $submission = TestTable::findOrFail($id);
+
+        $tableId = $submission->id;
+
+        $validated = $request->validate([
+            'first_name' => ['required'],
+            'last_name' => ['required'],
+            'status_id' => ['required'],
+            'document_checklist_path' => 'nullable',
+            'law_enforcement_sent'=>'nullable',
+            'ddo_notes' => 'nullable',
+            'open_at' => 'nullable',
+            'agent_investment_notes'=>'nullable',
+            'citizenship_certificate_id'=>'nullable',
+            'accounts_approval'=>'nullable',
+            'co_notes' => 'nullable',
+            'risk_level'=>'nullable',
+            'payment_amount' => 'nullable',
+            'Date_Of_Payment' => 'nullable',
+            'Assigned_DDO' => 'nullable',
+            'Assigned_Compliance' => 'nullable',
+            'authorized_agent_form_path' => 'nullable',
+            'proof_of_payment_path' => 'nullable',
+            'confirmation_form_path' => 'nullable',
+            'registration_application_path' => 'nullable',
+            'birth_record_path' => 'nullable',
+            'name_change_path' => 'nullable',
+            'citizenship_certificate_path' => 'nullable',
+            'residence_card_path' => 'nullable',
+            'military_records_path' => 'nullable',
+            'photograph_certificate_path' => 'nullable',
+            'national_id_path' => 'nullable',
+            'current_passport_pages_path' => 'nullable',
+            'proof_of_residence_path' => 'nullable',
+            'marriage_certificate_path' => 'nullable',
+            'divorce_decree_path' => 'nullable',
+            'curriculum_vitae_path' => 'nullable',
+            'professional_reference_path' => 'nullable',
+            'bank_reference_path' => 'nullable',
+            'sworn_affidavit_financial_path' => 'nullable',
+            'sworn_affidavit_spouse_path' => 'nullable',
+            'academic_certificates_path' => 'nullable',
+            'police_certificates_path' => 'nullable',
+            'visas_path' => 'nullable',
+            'medical_examiner_declaration_path' => 'nullable',
+            'official_transcripts_path' => 'nullable',
+            'custody_records_path' => 'nullable',
+            'statutory_declaration_path' => 'nullable',
+            'copy_of_parent_id_path' => 'nullable',
+            'passport_sized_photos_path' => 'nullable',
+            'ddo_assessment_path' => 'nullable',
+            'ceo_assessment_path' => 'nullable',
+            'co_assessment_path' => 'nullable',
+            'source_of_funds_path'=>'nullable',
+            'proof_of_investment_transferred_path' => 'nullable',
+            'proof_of_investment_path' => 'nullable',
+            'certified_copy_professional_certificate_medical_examiner_path' => 'nullable',
+            'net_worth_document_support_path' => 'nullable',
+            'professional_certificate_translator_path' => 'nullable',
+            'apostille_path' => 'nullable',
+            'professional_certificate_notary_path' => 'nullable',
+            'professional_certificate_attorney_path' => 'nullable',
+            'professional_certificate_oaths_commissioner_path' => 'nullable',
+
+        ]);
+
+        $patharray = [
+            'file_path',
+            'proof_of_payment_path',
+            'source_of_funds_path',
+            'document_checklist_path',
+            'authorized_agent_form_path',
+            'alternative_citizenship_path',
+            'confirmation_form_path',
+            'registration_application_path',
+            'birth_record_path',
+            'citizenship_certificate_id',
+            'name_change_path',
+            'citizenship_certificate_path',
+            'residence_card_path',
+            'military_records_path',
+            'photograph_certificate_path',
+            'national_id_path',
+            'current_passport_pages_path',
+            'proof_of_residence_path',
+            'marriage_certificate_path',
+            'divorce_decree_path',
+            'curriculum_vitae_path',
+            'professional_reference_path',
+            'bank_reference_path',
+            'sworn_affidavit_financial_path',
+            'sworn_affidavit_spouse_path',
+            'academic_certificates_path',
+            'police_certificates_path',
+            'visas_path',
+            'law_enforcement_report_path',
             'medical_examiner_declaration_path',
             'official_transcripts_path',
             'custody_records_path',
@@ -936,101 +960,114 @@ $files[]=$file_name;
 
 
 
-        //Status Update CodeL
-        $newStatus = $validated['status_id'];
-        //Accept
-        if ($newStatus == 13) {
 
+
+
+
+    $newStatus = $validated['status_id'];
+
+
+
+        if ($newStatus == 9 && $submission->status_id !== 9) {
             $agent = $submission->agent_id;
-            StatusChangedEvent::dispatch([$agent],'Your Application has been Accepted');
-            $user = User::find($agent);
-            $customMessage = 'Your Application has been Accepted ';
+            StatusChangedEvent::dispatch([$agent],'Your Application has been Delayed.More information has been');
+            $applicantName=$submission->first_name.$submission->last_name;
+            $applicationid=$submission->id;
+            $data = [
 
+                    'applicantName' => $applicantName,
+                    'applicationid'=>$applicationid,
+                    'image' => asset('public\images\logo-min.png')
+
+
+            ];
+            $pdf = \PDF::loadView('emails.myTestMail', $data);
+            $user = User::find( $agent);
+
+            Notification::send($user, new DWCause($data, $pdf));
 
         }
-    //Status Update CodeL
-    $newStatus = $validated['status_id'];
-    //Accept
-    if ($newStatus == 9) {
 
-        $agent = $submission->agent_id;
-        StatusChangedEvent::dispatch([$agent],'Your Application has been Delayed.More information has been');
-        $applicantName=$submission->first_name.$submission->last_name;
-        $applicationid=$submission->id;
-        $data = [
-
-                'applicantName' => $applicantName,
-                'applicationid'=>$applicationid,
-
-
-
-        ];
-        $pdf = \PDF::loadView('emails.myTestMail', $data);
-        $user = Auth::user();
-
-        Notification::send($user, new DWCause($data, $pdf));
-
-
-    }
+        $submission->update(['status_id' => $newStatus]);
 
 
 
 
         $newStatus = $validated['accounts_approval'];
         //Accept
-        if ($newStatus == "yes") {
+
+        if ($newStatus == "yes" && $submission->accounts_approval !== "yes") {
 
             $agent = $submission->acc_id;
             $agentco = $submission->ddo_id;
             $agentddo = $submission->co_id;
             $ref_number = $submission->ref_number;
-            StatusChangedEvent::dispatch([$agentddo, $agentco ,"1"],'Accounts have appraved the application'.$ref_number);
-
+            StatusChangedEvent::dispatch([$agentddo, $agentco ,"1"],'Accounts have approved the application'.$ref_number);
+            $user = User::find( $agentco);
+            $user->notify(new ACCAP($submission));
+            $users = User::find( $agentddo);
+            $users->notify(new ACCAP($submission));
         }
+
+
 
         $newStatus = $validated['status_id'];
         //Accept
-        if ($newStatus == 2) {
+
+        if ($newStatus == 2 && $submission->status_id !== 2) {
 
             $agent = $submission->ddo_id;
             $ref_number = $submission->ref_number;
             StatusChangedEvent::dispatch([$agent,"1"],$ref_number. "Has been cleared by the Verification officer to");
+            $user = User::find( $agent);
 
         }
 
         $newStatus = $validated['status_id'];
         //Accept
-        if ($newStatus == 15 || $newStatus == 14) {
+
+        if ($newStatus == 15 && $submission->status_id !== 15 || $newStatus == 14 && $submission->status_id !== 14) {
 
             $agent = $submission->ddo_id;
             $ref_number = $submission->ref_number;
-            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been withdrawn");
-
+            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been Withdrawn");
+            $user = User::find( $agent);
+            $user->notify(new RW($submission));
         }
 
         $newStatus = $validated['status_id'];
-        //Accept
-        if ($newStatus == 5) {
+        //Pending Board Decision
 
-            $agent = $submission->ddo_id;
+        if ($newStatus == 5 && $submission->status_id !== 5) {
+
+            $agent = $submission->agent_id;
+            $promoter = $submission->promoter_id;
             $ref_number = $submission->ref_number;
-            StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Pending board decision");
-
+            StatusChangedEvent::dispatch([$agent,"1",$promoter], "Application".$ref_number. "Pending board decision");
+            $user = User::find( $agent);
+            $user->notify(new PBO($submission));
+            $users = User::find($promoter);
+            $users->notify(new PBO($submission));
         }
 
         $newStatus = $validated['status_id'];
-        //Accept
-        if ($newStatus == 19) {
+    //Return for compliance
+
+        if ($newStatus == 19 && $submission->status_id !== 19) {
 
             $agent = $submission->co_id;
             $ref_number = $submission->ref_number;
             StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been returned for Compliance");
-
+            $user = User::find($agent);
+            $user->notify(new RTC($submission));
         }
 
+
+
         $newStatus = $validated['status_id'];
-        //Accept
-        if ($newStatus == 11) {
+        //Grand Economic Fund
+
+        if ($newStatus == 11 && $submission->type_of_investment == 1 && $submission->status_id !== 11) {
 
 
             $agentddo = $submission->agent_id;
@@ -1039,59 +1076,155 @@ $files[]=$file_name;
 
 
 
-            StatusChangedEvent::dispatch([$ceo,"1"], "Application".$ref_number. "Has been Granted");
+            StatusChangedEvent::dispatch([$ceo,"1"], "Application".$ref_number. " With investment type National Economic Fund has been Granted");
+            $date = date('Y-m-d');
+            $applicantName=$submission->first_name.$submission->last_name;
+            $applicationid=$submission->id;
+            $investmentamount=$submission->payment_amount;
+            $data = [
 
+                    'applicantName' => $applicantName,
+                    'applicationid'=>$applicationid,
+                    'investmentamount'=>$investmentamount,
+                    'ref_number'=>$ref_number,
+                     'date'=>$date,
+
+
+            ];
+            $pdf = \PDF::loadView('emails.notifcation_NEF', $data);
+            $user = User::find( $ceo);
+            Notification::send($user, new Granted($data, $pdf));
         }
+        //Real Estate Project
+        if ($newStatus == 11 && $submission->type_of_investment == 2 && $submission->status_id !== 11) {
 
+
+            $agentddo = $submission->agent_id;
+            $ceo = $submission->agent_id;
+            $ref_number = $submission->ref_number;
+
+
+
+            StatusChangedEvent::dispatch([$ceo,"1"], "Application".$ref_number. " With investment type Real Estate Project has been Granted");
+            $date = date('Y-m-d');
+            $applicantName=$submission->first_name.$submission->last_name;
+            $applicationid=$submission->id;
+            $investmentamount=$submission->payment_amount;
+            $data = [
+
+                    'applicantName' => $applicantName,
+                    'applicationid'=>$applicationid,
+                    'investmentamount'=>$investmentamount,
+                    'ref_number'=>$ref_number,
+                     'date'=>$date,
+
+
+            ];
+            $pdf = \PDF::loadView('emails.notifcation_real_estate', $data);
+            $user = User::find($ceo);
+            Notification::send($user, new Granted($data, $pdf));
+        }
+        $newStatus = $validated['status_id'];
+    //Real Estate Project
+    if ($newStatus == 11 && $submission->type_of_investment == 4 && $submission->status_id !== 11) {
+
+
+        $agentddo = $submission->agent_id;
+        $ceo = $submission->agent_id;
+        $ref_number = $submission->ref_number;
+
+
+
+        StatusChangedEvent::dispatch([$ceo,"1"], "Application".$ref_number. " With investment type Government Bonds has been Granted");
+        $date = date('Y-m-d');
+        $applicantName=$submission->first_name.$submission->last_name;
+        $applicationid=$submission->id;
+        $investmentamount=$submission->payment_amount;
+        $data = [
+
+                'applicantName' => $applicantName,
+                'applicationid'=>$applicationid,
+                'investmentamount'=>$investmentamount,
+                'ref_number'=>$ref_number,
+                 'date'=>$date,
+
+
+        ];
+        $pdf = \PDF::loadView('emails.notification_bond', $data);
+        $user = User::find($ceo);
+        Notification::send($user, new Granted($data, $pdf));
+    }
 
         $newStatus = $validated['status_id'];
-        $existingStatus = $submission->status_id;
-        //Accept
-        if ($newStatus == 8) {
+
+        //Denied
+
+
+        if ($newStatus == 8 && $submission->status_id !== 8 ) {
 
 
             $agentddo = $submission->agent_id;
             $agent = $submission->agent_id;
             $ref_number = $submission->ref_number;
+
             StatusChangedEvent::dispatch([$agent,"1"], "Application".$ref_number. "Has been Denied");
+            $date = date('Y-m-d');
             $applicantName=$submission->first_name.$submission->last_name;
             $applicationid=$submission->id;
             $data = [
 
                     'applicantName' => $applicantName,
                     'applicationid'=>$applicationid,
-
+                    'ref_number'=>$ref_number,
+'date'=>$date,
 
 
             ];
             $pdf = \PDF::loadView('emails.notification_denied', $data);
-            $user = Auth::user();
-
+            $user = User::find( $agent);
             Notification::send($user, new Denied($data, $pdf));
+
         }
 
         $newStatus = $validated['risk_level'];
-        //Accept
-        if ($newStatus == 2  ) {
+        //Risk Level low
+
+        if ($newStatus == 2  && $submission->risk_level !== 2) {
 
 
 
             $risk = $submission->risk_id;
             $ref_number = $submission->ref_number;
             StatusChangedEvent::dispatch([$risk,"1"], "Application".$ref_number. "Risk Level has been set to:Low risk");
-
+            $user = User::find($risk);
+            $user->notify(new RISK1($submission));
         }
 
         $newStatus = $validated['risk_level'];
-        //Accept
-        if ($newStatus == 3 ) {
+        //Risk level medium.
+
+        if ($newStatus == 3 && $submission->status_id !== 3) {
 
 
 
             $risk = $submission->risk_id;
             $ref_number = $submission->ref_number;
             StatusChangedEvent::dispatch([$risk,"1"], "Application".$ref_number. "Risk Level has been set to:Medium risk");
+            $user = User::find( $risk);
+            $user->notify(new RISKLEVEL($submission));
+        }
+        $newStatus = $validated['status_id'];
+        //Submit.
 
+        if ($newStatus == 17 && $submission->status_id !== 17) {
+
+
+
+            $co = $submission->co_id;
+            $ref_number = $submission->ref_number;
+            StatusChangedEvent::dispatch([$co,"1"], "Application".$ref_number. "Has been added to your queue.");
+            $user = User::find($co);
+            $user->notify(new Submit($submission));
         }
 
         $submission->update($validated);

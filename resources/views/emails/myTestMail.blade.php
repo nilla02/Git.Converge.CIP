@@ -13,7 +13,7 @@
         }
 
         h1 {
-            color: #333;
+            color: #e60202;
             font-size: 15px;
             margin-bottom: 20px;
         }
@@ -22,13 +22,17 @@
             color: #0c0c0c;
             margin-bottom: 15px;
         }
+
+        .logo{
+
+text-align: right;
+        }
+
     </style>
 
 </head>
 <body>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5" />
-    </svg>
+<div class="logo">  <img style="margin-left: auto" src="{{public_path().'/logo-min.png'}}" > </div>
 
 
     <p>{{ $applicantName }},</p>
@@ -50,16 +54,27 @@
     <p>You shall be informed at the soonest once there is an update on the status of this application.</p>
     <p>Regards</p>
     <br>
-    <br>
     <p>Nestor Alfred</p>
     <p>Chief Executive Officer</p>
-    <br>
     <p>{{$applicationid}}</p>
-    <p>Citizenship by Investment Unit</p>
-    <p>5 th Floor, Francis Compton Building</p>
-    <p>Waterfront, Castries, Saint Lucia, West Indies, LC04 301</p>
+    <table style="width:100%">
+        <tbody>
+        <tr>
+            <td>
 
-    <p>T  1-758-458-6050</p>
-    <p>W cipsaintlucia.com</p>
+        <p>Citizenship by Investment Unit</p>
+            <p>5 th Floor, Francis Compton Building</p>
+            <p>Waterfront, Castries, Saint Lucia, West Indies, LC04 301</p>
+
+            <p> 1-758-458-6050</p>
+            <p> cipsaintlucia.com</p>
+            </td>
+            <td style="text-align:right;">
+                <img style="width:150px; height:150px" src="{{public_path().'/images/logo2.png'}}" >
+            </td>
+        <tr>
+    </tbody>
+    </table>
+</div>
 </body>
 </html>

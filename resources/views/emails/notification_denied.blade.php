@@ -30,10 +30,18 @@
             font-size: 14px;
             font-style: italic;
         }
+        .logo{
+
+text-align: right;
+        }
+
     </style>
 </head>
 
 <body>
+    <div class="logo">  <img style="margin-left: auto" src="{{public_path().'/logo-min.png'}}" >
+        {{$date}}
+    </div>
     <address>
         {{ $applicantName }}<br>
         [Address Line 1]<br>
@@ -43,9 +51,9 @@
         [Address Line 5]
     </address>
 
-    <h2>Dear {{ $applicantName }},</h2>
+    <p><strong> Dear {{ $applicantName }}</strong></p>
 
-    <p><strong>NOTIFICATION LETTER - {{ $applicantName }}</strong></p>
+    <p>NOTIFICATION LETTER - {{ $applicantName }}</p>
 
     <p>
         Having considered your application for citizenship by investment pursuant to Section 36(1)(b) of
@@ -67,9 +75,29 @@
     <p><strong>Application #:</strong> {{$applicationid}}</p>
 
     <footer>
+        <img style="width:150px; height:150px" src="{{public_path().'/images/stamp1.png'}}" >
         <p>Regards,</p>
         <p>Mc Claude Emmanuel</p>
         <p>Chief Executive Officer</p>
+
+        <table style="width:100%">
+            <tbody>
+            <tr>
+                <td>
+
+            <p>Citizenship by Investment Unit</p>
+                <p>5 th Floor, Francis Compton Building</p>
+                <p>Waterfront, Castries, Saint Lucia, West Indies, LC04 301</p>
+
+                <p> 1-758-458-6050</p>
+                <p> cipsaintlucia.com</p>
+                </td>
+                <td style="text-align:right;">
+                    <img style="width:150px; height:150px" src="{{public_path().'/images/logo2.png'}}" >
+                </td>
+            <tr>
+        </tbody>
+        </table>
     </footer>
 
     <p>Cc: Authorised Agent</p>

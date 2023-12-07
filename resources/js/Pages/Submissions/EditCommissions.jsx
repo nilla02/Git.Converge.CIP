@@ -11,13 +11,104 @@ import Authenticated from '@/Layouts/AuthenticatedSidebar';
 import Swal from 'sweetalert2';
 
 const fields = {
+
+
+
+    country_id: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+            "risk_assessment_officer",
+        ],
+        label: "Country of Residence",
+        field: "country",
+        type: "text",
+    },
+    ddo_notes: {
+        roles: ["due_diligence_officer",   "risk_assessment_officer", "website_admin", "ceo", "promoter"],
+        label: "DDO Notes",
+        field: "comment",
+        type: "text",
+    },
+    co_notes: {
+        roles: ["compliance_officer", "website_admin",   "risk_assessment_officer", "ceo", "promoter"],
+        label: "Verification Officer Notes",
+        field: "comment",
+        type: "text",
+    },
+    Region: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+            "risk_assessment_officer",
+        ],
+        label: "Region",
+        label: "Region",
+        field: "region",
+        type: "text",
+    },
+    citizenship_certificate_id:{
+        roles: [
+
+            "processing",
+            "website_admin",
+            "ceo",
+
+        ],
+        label: "COR",
+        field: "input",
+        type: "text",
+    },
+    type_of_applicant: {
+        roles: ["agents", "compliance_officer", "website_admin", "ceo"],
+        label: "Type of Applicant",
+        field: "TOA",
+        type: "text",
+    },
+    type_of_investment: {
+        roles: ["agents", "compliance_officer", "website_admin", "ceo"],
+        label: "Type of investment",
+        field: "TOI",
+        type: "text",
+    },
+
+    risk_level:{
+        roles: [ "website_admin","due_diligence_officer"],
+        label: "Risk_Level",
+        field: "select_2",
+
+    },
+    payment_amount:{
+        roles: ["accountant","website_admin"],
+        label: "Total payment receive",
+        field: "input",
+        type: "text",
+    },
+    law_enforcement_sent:
+    {
+        roles:["due_diligence_officer","website_admin","ceo"],
+        label:"law_enforcement_sent",
+        field:"check_box",
+    },
+
+    accounts_approval:
+    {
+        roles:["accountant","ceo","website_admin"],
+        label:"accounts_approval",
+        field:"check_box",
+    },
     document_checklist_path: {
         roles: [
             "agents",
             "compliance_officer",
-            "due_diligence_officer",
+
             "website_admin",
-            "processing",
             "ceo",
             "promoter",
             "risk_assessment_officer",
@@ -29,11 +120,10 @@ const fields = {
     authorized_agent_form_path: {
         roles: [
             "agents",
-            "due_diligence_officer",
+
             "compliance_officer",
             "website_admin",
             "ceo",
-            "processing",
             "promoter",
             "risk_assessment_officer",
         ],
@@ -46,9 +136,8 @@ const fields = {
         roles: [
             "agents",
             "corp_sec",
-            "due_diligence_officer",
+
             "compliance_officer",
-            "processing",
             "corp_sec",
             "website_admin",
             "ceo",
@@ -64,10 +153,9 @@ const fields = {
         roles: [
             "agents",
             "compliance_officer",
-            "due_diligence_officer",
+
             "website_admin",
             "corp_sec",
-            "processing",
             "ceo",
             "promoter",
             "corp_sec",
@@ -77,14 +165,14 @@ const fields = {
         type: "text",
     },
 
-    Registration_application_path: {
+    registration_application_path: {
         roles: [
             "agents",
             "compliance_officer",
-            "due_diligence_officer",
+
             "website_admin",
             "corp_sec",
-            "processing",
+
             "ceo",
             "promoter",
         ],
@@ -97,8 +185,7 @@ const fields = {
         roles: [
             "agents",
             "compliance_officer",
-            "processing",
-            "due_diligence_officer",
+
             "website_admin",
             "ceo",
             "promoter",
@@ -108,15 +195,50 @@ const fields = {
         field: "file",
         type: "text",
     },
+    law_enforcement_report_path:{
+        roles: [
+
+"due_diligence_officer",
+            "website_admin",
+            "ceo",
+
+        ],
+        label: "Law enforcement report",
+        field: "file",
+        type: "text",
+    },
+    ddo_assessment_path:{
+        roles: [
+
+"due_diligence_officer",
+            "website_admin",
+            "ceo",
+
+        ],
+        label: "Due Diligence Assessment",
+        field: "file",
+        type: "text",
+    },
+    file_path:{
+        roles: [
+
+"due_diligence_officer",
+            "website_admin",
+            "ceo",
+
+        ],
+        label: "Addition Files",
+        field: "xfile",
+        type: "text",
+    },
 
     sworn_affidavit_spouse_path: {
         roles: [
             "agents",
             "compliance_officer",
-            "due_diligence_officer",
+
             "website_admin",
             "ceo",
-            "processing",
             "corp_sec",
             "promoter",
         ],
@@ -129,10 +251,9 @@ const fields = {
         roles: [
             "agents",
             "compliance_officer",
-            "due_diligence_officer",
+
             "website_admin",
             "ceo",
-            "processing",
             "promoter",
             "corp_sec",
         ],
@@ -141,9 +262,409 @@ const fields = {
         type: "text",
     },
 
+    birth_record_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+
+            "website_admin",
+            "ceo",
+            "corp_sec",
+            "promoter",
+        ],
+        label: "Birth Record",
+        field: "file",
+        type: "text",
+    },
+
+    citizenship_certificate_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+"processing",
+            "website_admin",
+            "ceo",
+            "promoter",
+            "corp_sec",
+        ],
+        label: "Certificate(s) of Citizenship ",
+        field: "file",
+        type: "text",
+    },
+
+    residence_card_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+
+            "website_admin",
+            "ceo",
+            "promoter",
+            "corp_sec"
+        ],
+        label: "Permanent Residence Card or Certificate",
+        field: "file",
+        type: "text",
+    },
+    national_id_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+
+            "website_admin",
+            "ceo",
+            "promoter",
+            "corp_sec"
+        ],
+        label: "National Identity Card",
+        field: "file",
+        type: "text",
+    },
+    source_of_funds_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+
+            "website_admin",
+            "ceo",
+            "promoter",
+            "accountant",
+            "corp_sec",
+        ],
+        label: "Source of Funds",
+        field: "file",
+        type: "text",
+    },
+    current_passport_pages_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+            "corp_sec"
+        ],
+        label: "Passport Pages",
+        field: "file",
+        type: "text",
+    },
+
+    visas_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "corp_sec",
+            "promoter",
+        ],
+        label: "Visas",
+        field: "file",
+        type: "text",
+    },
+
+    apostille_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+            "corp_sec",
+        ],
+        label: "Copy of Apostille",
+        field: "file",
+        type: "text",
+    },
+
+    passport_sized_photos_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Passport-sized Photos",
+        field: "file",
+        type: "text",
+    },
+
+    proof_of_residence_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "corp_sec",
+            "ceo",
+            "promoter",
+        ],
+        label: "Proof of Residential Address Document",
+        field: "file",
+        type: "text",
+    },
+    proof_of_investment_path:{
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "corp_sec",
+            "promoter",
+            "accountant",
+        ],
+        label: "Proof of Investment",
+        field: "file",
+        type: "text",
+    },
+    marriage_certificate_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+            "corp_sec",
+        ],
+        label: "Marriage Record or Certificate",
+        field: "file",
+        type: "text",
+    },
+
+    divorce_decree_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "corp_sec",
+            "promoter",
+        ],
+        label: "Divorce Decree Document",
+        field: "file",
+        type: "text",
+    },
+
+    police_certificates_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "law_enforcement_officer",
+            "website_admin",
+            "ceo",
+            "corp_sec",
+            "promoter",
+        ],
+        label: "Police Certificate",
+        field: "file",
+        type: "text",
+    },
+
+    custody_records_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Custody or Legal guardianship Records",
+        field: "file",
+        type: "text",
+    },
+
+    statutory_declaration_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Statutory Declaration of Non-Accompying Parent",
+        field: "file",
+        type: "text",
+    },
+
+    copy_of_parent_id_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Photo ID of a Non-accompaying Parent",
+        field: "file",
+        type: "text",
+    },
+
+    professional_certificate_translator_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Professional certificate translator",
+        field: "file",
+        type: "text",
+    },
+
+    apostille_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Curriculum Vitae",
+        field: "file",
+        type: "text",
+    },
+
+    professional_certificate_notary_path: {
+        roles: [
+            "agents",
+            "compliance_officer",
+            "website_admin",
+            "ceo",
+            "promoter",
+        ],
+        label: "Professional Reference Document",
+        field: "file",
+        type: "text",
+    },
+
+    professional_certificate_attorney_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Professional and Academic Certificates",
+        field: "file",
+        type: "text",
+    },
+
+
+    professional_certificate_oaths_commissioner_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Official Transcripts from Educational Institution",
+        field: "file",
+        type: "text",
+    },
+
+    net_worth_document_support_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Net worth document",
+        field: "file",
+        type: "text",
+    },
+	proof_of_payment_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Proof of payment",
+        field: "file",
+        type: "text",
+    },
+    sworn_affidavit_financial_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Sworn Affidavit Financial",
+        field: "file",
+        type: "text",
+    },
+    sworn_affidavit_spouse_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Sworn Affidavit Spouse",
+        field: "file",
+        type: "text",
+    },
+    academic_certificates_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Academic Certificates",
+        field: "file",
+        type: "text",
+    },
+    military_records_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Military Records",
+        field: "file",
+        type: "text",
+    },
+    curriculum_vitae_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Curriculum vitae",
+        field: "file",
+        type: "text",
+    },
+    professional_reference_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Professional reference",
+        field: "file",
+        type: "text",
+    },
+    bank_reference_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Bank reference",
+        field: "file",
+        type: "text",
+    },
+    sworn_affidavit_financial_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Sworn affidavit financial",
+        field: "file",
+        type: "text",
+    },
+
+    ceo_assessment_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Chief Operating Officer assessment",
+        field: "file",
+        type: "text",
+    },
+    co_assessment_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Verification Assessment",
+        field: "file",
+        type: "text",
+    },
+    proof_of_investment_transferred_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Proof of investment transferred",
+        field: "file",
+        type: "text",
+    },
+    co_agent_notes: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Agent co_notes ",
+        field: "comment",
+        type: "text",
+    },
+    ceo_agent_notes: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Chief Operating Officer Agent notes",
+        field: "comment",
+        type: "text",
+    },
+    certified_copy_professional_certificate_medical_examiner_path: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Professional Medical examinar certificate",
+        field: "file",
+        type: "text",
+    },
+    agent_investment_notes:{
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Agent investment notes",
+        field: "comment",
+        type: "text",
+    },
 
 
 
+  addon: {
+        roles: ["agents", "compliance_officer", "website_admin", "promoter"],
+        label: "Addons",
+        field: "xfile",
+        type: "text",
+    },
 };
 
 export default function EditSubmissions({ className = "", submission, auth ,notifications }) {
@@ -348,18 +869,12 @@ export default function EditSubmissions({ className = "", submission, auth ,noti
             }
 
             return (
-                <div>
+                <div className="mt-4 text-blue-500">
                     <InputLabel htmlFor={key} value={field.label} />
                     <a href={val} target="_blank">
-                        {val}
+                     View Application
                     </a>{" "}
-                    <button
-                        type="button"
-                        onClick={() => handleFileDelete(key)}
-                        className="text-red-500 hover:text-red-700"
-                    >
-                        Delete
-                    </button>
+
                 </div>
             );
         }

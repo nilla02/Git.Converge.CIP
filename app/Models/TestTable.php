@@ -179,6 +179,7 @@ protected $appends = ['status','day_passed'];
     'processing_fee_received_date',
     'preprocessing',
     'law_enforcement_sent',
+    'law_enforcement_report_path',
     'preprocess_law_enforcement_docs_sent_date',
     'proceed_due_diligence',
     'proceed_due_diligence_docs_sent_date',
@@ -356,7 +357,7 @@ public function acc()
     return $this->generateFilePath($value);
   }
 
-  protected function getPoliceCertificatesPathAttribute($value)
+  protected function getPoliceCertificatePathAttribute($value)
   {
     return $this->generateFilePath($value);
   }
@@ -371,7 +372,7 @@ public function acc()
     return $this->generateFilePath($value);
   }
 
-  protected function getOfficialTranscriptsPathAttribute($value)
+  protected function getOfficialTranscriptPathAttribute($value)
   {
     return $this->generateFilePath($value);
   }
@@ -501,7 +502,7 @@ public function acc()
           }
       }
 
-      return $paths;
+      return  count($paths)>0? $paths: null ;
   }
 
 }

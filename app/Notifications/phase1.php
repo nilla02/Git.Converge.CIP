@@ -30,7 +30,7 @@ class phase1 extends Notification
      */
     public function via($notifiable): array
     {
-        return ['database','mail' ];
+        return ['database', ];
     }
 
     /**
@@ -47,7 +47,7 @@ class phase1 extends Notification
         ->greeting('Hello,')
         ->line('The application '.$this->ref_number,"has been succefully created and added in a queue.")
         ->line('A Subsequent Email will be sent when the application begins processing.')
-        ->action('View dashboard', url('/home'))
+        ->action('View dashboard', url('/'))
         ->line('Thank you for using our application!');
     }
 
@@ -59,7 +59,7 @@ class phase1 extends Notification
     public function toArray($notifiable): array
     {
             return [
-                'data' => 'The application was successfully created for ' . $this->full_name,
+                'data' => 'The application' . $this->ref_number.'was Draft successfully created',
         ];
     }
 }

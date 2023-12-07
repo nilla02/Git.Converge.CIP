@@ -5,7 +5,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
+use Illuminate\Queue\SerializesModels;
 class Send90DayNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -18,7 +18,6 @@ class Send90DayNotification extends Notification implements ShouldQueue
     public function __construct($application)
     {
         $this->application = $application;
-        $this->applicatiion->
         $this->full_name = $this->application->first_name . ' ' . $this->application->last_name;
     }
 

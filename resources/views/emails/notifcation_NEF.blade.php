@@ -30,19 +30,28 @@
             font-size: 14px;
             font-style: italic;
         }
+        .logo{
+
+text-align: right;
+        }
     </style>
 </head>
 
 <body>
+    <div class="logo">
+        <img style="margin-left: auto; display: block;" src="{{ public_path().'/logo-min.png' }}" alt="Logo Image">
+        <span style=" display: block;">{{ $date }}</span>
+      </div>
+
     <address>
-        [Applicant Name]<br>
+    {{ $applicantName }}<br>
         [Address Line 1]<br>
         [Address Line 2]
     </address>
 
-    <h2>Dear [Applicant Name],</h2>
+    <p>Dear  {{ $applicantName }}</p>
 
-    <p><strong>NOTIFICATION LETTER – APPLICANT(S) NAME(S)</strong></p>
+    <p><strong>NOTIFICATION LETTER – {{ $applicantName }}</strong></p>
 
     <p>
         We are pleased to inform you that your application for citizenship by investment has been granted.
@@ -53,7 +62,7 @@
     </p>
 
     <ol>
-        <li>Payment of the Qualifying Investment of [Amount in Words] United States Dollars (USDAmount in Figures) is to be made to the National Economic Fund within the next ninety (90) calendar days.</li>
+        <li>Payment of the Qualifying Investment of {{$investmentamount}} United States Dollars (USD {{$investmentamount}}) is to be made to the National Economic Fund within the next ninety (90) calendar days.</li>
         <li>The Oath of Allegiance, which is to be signed before an Attorney-at-Law, a Consular Officer of Saint Lucia, an Honorary Consul of Saint Lucia, a Notary Royal, or a Notary Public, is required from applicants sixteen (16) years of age and over.</li>
     </ol>
 
@@ -63,12 +72,13 @@
 
     <footer>
         <p>Regards,</p>
+        <img style="width:150px; height:150px" src="{{public_path().'/images/stamp1.png'}}" >
         <p>Mc Claude Emmanuel</p>
         <p>Chief Executive Officer</p>
     </footer>
 
     <p>Cc: Authorised Agent</p>
-    <p>Application # Application Number</p>
+    <p>Application #  {{$applicationid}}</p>
 </body>
 
 </html>

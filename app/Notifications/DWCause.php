@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
-
+use Illuminate\Queue\SerializesModels;
 class DWCause extends Notification
 {
     use Queueable;
@@ -39,13 +39,17 @@ class DWCause extends Notification
      * Get the mail representation of the notification.
      */
     public function toMail($notifiable)
-    {
-        return (new MailMessage)
-        ->greeting('Hello,')
-        ->line('Please read the documents below.')
+{
+    return (new MailMessage)
+        ->subject('Subject of the email')
+        ->greeting('Hello!')
+        ->line('Your Application has been Delayed.')
+        ->line('More information has been sent to you in the PDF below.')
 
-            ->attachData($this->pdf->output(), 'document.pdf');
-    }
+        ->attachData($this->pdf->output(), 'document.pdf', [
+            'mime' => 'application/pdf',
+        ]);
+}
 
     /**
      * Get the array representation of the notification.

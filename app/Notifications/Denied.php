@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
+use Illuminate\Queue\SerializesModels;
 class Denied extends Notification
 {
     use Queueable;
@@ -56,7 +56,7 @@ class Denied extends Notification
     {
 
             return [
-                'data' => 'The application was delayed ',
+                'data' => 'The application was denied. ',
         ];
 
     }
