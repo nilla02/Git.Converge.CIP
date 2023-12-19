@@ -10,7 +10,8 @@ class ActivityLogController extends Controller
     public function index()
     {
         $logs=Activity::all();
-     return Inertia::render('CipLogs',['logs'=>$logs]);
+        $notifications = auth()->user()->unreadNotifications;
+     return Inertia::render('CipLogs',['logs'=>$logs,'notifications'=>$notifications]);
     }
 
     /**
@@ -18,7 +19,7 @@ class ActivityLogController extends Controller
      */
     public function create()
     {
-      
+
     }
 
     /**
@@ -27,7 +28,7 @@ class ActivityLogController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-      
+
             'log_name'=> 'required',
             'description'=> 'required',
             'subject_id'=> 'required',
@@ -39,11 +40,11 @@ class ActivityLogController extends Controller
         Activity::create([
             'log_name' => $validatedData['log_name'],
             'description' => $validatedData['description'],
-            'properties' => $validatedData['properties'], 
+            'properties' => $validatedData['properties'],
             'causer_id' => $validatedData['causer_id'],
             'subject_id' => $validatedData['subject_id'],
         ]);
-        return redirect()->route('CipLogs'); 
+        return redirect()->route('CipLogs');
     }
 
 }

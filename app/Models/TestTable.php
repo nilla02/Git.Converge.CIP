@@ -13,6 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Activitylog\LogOptions;
 use App\Models\User;
 use App\Models\Status_model;
+use App\Models\Applicant_Type;
 use App\Models\Country;
 
 
@@ -32,8 +33,8 @@ class TestTable extends Model
   protected function getActivitylogOptions(): LogOptions
   {
       $logOptions = new LogOptions();
-      $logOptions->logName = 'User Form Edited'; // Choose a suitable log name
-      $logOptions->logAttributes = ['agent_id', 'id']; // Set the attributes directly
+      $logOptions->logName = 'Files uploaded'; // Choose a suitable log name
+      $logOptions->logAttributes = ['agent_id', 'ref_number']; // Set the attributes directly
       return $logOptions;
   }
   protected static function boot()
@@ -68,20 +69,36 @@ class TestTable extends Model
 
 protected $appends = ['status','day_passed'];
 
-    protected static function booted(): void
-    {
-        static::created(function (TestTable $testtable) {
-            $submission = $testtable;
-        $Agent = User::Find( $submission->agent_id);
-        $authUserName =$Agent->name;
+protected static function booted(): void
+{
+    static::created(function (TestTable $testtable) {
+        $submission = $testtable;
+        $agent = User::find($submission->agent_id);
+        $authUserName = $agent->name;
         $tableId = $submission->id;
-  $authUserid = $submission->agent_id;
-  $authUserFirstLetter = strtoupper(substr($authUserName, 0, 1));
-  $testtable->ref_number =$authUserid.$authUserFirstLetter.$submission->type_of_investment.$submission->Region.$tableId.$submission->type_of_applicant;
-  $testtable->save();
-        });
+        $authUserid = $submission->agent_id;
+        $authUserFirstLetter = strtoupper(substr($authUserName, 0, 1));
+        $applicantType = Applicant_Type::find($submission->type_of_applicant);
+        $code = $applicantType->code;
+        if ($submission->type_of_applicant == 2) {
+            $testtable->ref_number = $authUserid . $authUserFirstLetter . $submission->type_of_investment . $submission->Region . $tableId . $submission->type_of_applicant;
+        } else {
+            $principleApplicant = TestTable::find($submission->principle_applicant_id);
 
-    }
+            if ($principleApplicant) {
+                $refSuffix = $principleApplicant->ref_number .$submission->id.$code;
+                // Construct ref_number using prefix and suffix
+                $testtable->ref_number =$refSuffix;
+            } else {
+                // Handle the case where principle_applicant_id is not found
+                $testtable->ref_number = 'DefaultRef'; // You may change this default value as needed
+            }
+        }
+
+        $testtable->save();
+    });
+}
+
 
 
   protected $fillable = [
@@ -183,6 +200,7 @@ protected $appends = ['status','day_passed'];
     'preprocess_law_enforcement_docs_sent_date',
     'proceed_due_diligence',
     'proceed_due_diligence_docs_sent_date',
+    'compliance_date',
     'addon',
     'open_at',
     'processing_fees_received_date',

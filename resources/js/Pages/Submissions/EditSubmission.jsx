@@ -11,6 +11,7 @@ import { Transition } from "@headlessui/react";
 import AuthenticatedLayoutAA from "@/Layouts/AuthenticatedLayoutAA";
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
 import Swal from "sweetalert2";
+import EditCubmissions from "./EditCommissions";
 
 const fields = {
     first_name: {
@@ -781,11 +782,21 @@ export default function EditSubmissions({
         ...submission,
     });
 
-console.log("Submission",submission)//submission
-    function handleFileChange(key, e) {
-        const files = e.target.files
-        setData(key,files.length>1?files:files[0]);
-    }
+    const handleFileChange = (key, e) => {
+        const files = e.target.files;
+        const userRole = auth.user.role_names[0] || "0";
+
+        // Check if the dropped file type is allowed based on user's role
+        if (files.length > 0 && isFileAllowed(files[0], userRole)) {
+          setData(key, files[0]);
+        } else {
+          // Handle file type not allowed
+          alert("Unsupported file type or no file selected. Please choose a valid file.");
+          // Reset the file input if needed
+          e.target.value = null;
+        }
+      };
+
 
     function displayfiles(value){
 
@@ -829,6 +840,10 @@ return value.map(x=>(
             showConfirmButton: false,
             timer: 1500,
         });
+    };
+
+    const updatehandleClick = () => {
+        setData("status_id", 12);
     };
     const handleFileDelete = (key) => {
         setData(key, null);
@@ -1164,12 +1179,29 @@ return value.map(x=>(
 
                     }
                 };
+                const isFileAllowed = (file, userRole) => {
+                    const allowedImageTypes = ["image/png", "image/jpeg"];
+                    const allowedDocumentTypes = ["application/pdf", "application/msword", "application/vnd.ms-excel"];
 
-                const isFileAllowed = (file) => {
-                    const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
-                    return allowedTypes.includes(file.type);
-                };
+                    if (userRole === "agent" || userRole === "promoter") {
+                      return allowedImageTypes.includes(file.type) || allowedDocumentTypes.includes(file.type);
+                    }
 
+                    return allowedDocumentTypes.includes(file.type);
+                  };
+
+                  const handleFileChange = (key, e) => {
+                    const files = e.target.files;
+                    const userRole = auth.user.role_names[0] || "0";
+
+                    // Check if the dropped file type is allowed based on user's role
+                    if (isFileAllowed(files[0], userRole)) {
+                      setData(key, files[0]);
+                    } else {
+                      // Handle file type not allowed
+                      alert("File type not allowed for your role.");
+                    }
+                  };
                 return (
                     <div key={key}>
                         <div className="mb-0">
@@ -1197,13 +1229,9 @@ return value.map(x=>(
                                 ) : (
                                     <div
                                         className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer"
-                                        onClick={() =>
-                                            document
-                                                .querySelector(`input[name="${key}"]`)
-                                                .click()
-                                        }
+                                        onClick={() => document.querySelector(`input[name="${key}"]`).click()}
                                         onDragOver={(e) => e.preventDefault()}
-                                        onDrop={handleDrop}
+                                        onDrop={(e) => handleDrop(e)}
                                     >
                                         <BsCloudUpload className="text-3xl mb-2 mx-auto text-gray-400" />
                                         <p className="text-gray-500">
@@ -1415,6 +1443,13 @@ return value.map(x=>(
                                             Save
                                         </PrimaryButton>
 
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={processing}
+                                            onClick={updatehandleClick}
+                                        >
+
+                                        </PrimaryButton>
                                         <Transition
                                             show={recentlySuccessful}
                                             enterFrom="opacity-0"
@@ -1425,6 +1460,7 @@ return value.map(x=>(
                                                 Saved.
                                             </p>
                                         </Transition>
+
                                     </div>
                                 </form>
                             </section>

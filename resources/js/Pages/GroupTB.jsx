@@ -6,7 +6,6 @@ import ReactPaginate from 'react-paginate';
 
 
 export default function Edit({ auth, group_models,notifications }) {
-    console.log(group_models);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);

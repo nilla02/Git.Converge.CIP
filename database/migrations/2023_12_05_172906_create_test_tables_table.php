@@ -22,9 +22,23 @@ class CreateTestTablesTable extends Migration
             $table->text('country_of_issue')->nullable();
             $table->integer('payment_amount')->nullable();
             $table->text('passport_number')->nullable();
+
             $table->text('visa_Number')->nullable();
             $table->date('visa_issue_date')->nullable();
             $table->date('visa_expiration_date')->nullable();
+
+            $table->text('visa_Number_2')->nullable();
+            $table->date('visa_issue_date_2)')->nullable();
+            $table->date('visa_expiration_date_2')->nullable();
+
+            $table->text('visa_Number_3')->nullable();
+            $table->date('visa_issue_date_3)')->nullable();
+            $table->date('visa_expiration_date_3')->nullable();
+
+            $table->text('visa_Number_4')->nullable();
+            $table->date('visa_issue_date_4)')->nullable();
+            $table->date('visa_expiration_date_4')->nullable();
+
             $table->date('date_of_payment')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('co_id')->nullable();
@@ -97,14 +111,19 @@ class CreateTestTablesTable extends Migration
             $table->text('agent_investment_notes')->nullable();
             $table->text('certified_copy_professional_certificate_medical_examiner_path')->nullable();
             $table->text('net_worth_document_support_path')->nullable();
+            $table->text('sponsered_document_path')->nullable();
             $table->text('professional_certificate_translator_path')->nullable();
             $table->text('apostille_path')->nullable();
             $table->text('professional_certificate_notary_path')->nullable();
             $table->text('professional_certificate_attorney_path')->nullable();
             $table->text('professional_certificate_oaths_commissioner_path')->nullable();
             $table->text('source_of_funds_path')->nullable();
+            $table->text('sponsered_application')->nullable();
+            $table->text('jrcc_cq')->nullable();
+            $table->text('fra_cq')->nullable();
             $table->dateTime('source_of_funds_docs_sent_date')->nullable();
             $table->dateTime('processing_fee_received_date')->nullable();
+            $table->text('compliance_date')->nullable();
             $table->text('preprocessing')->nullable();
             $table->text('fees_cleared')->nullable();
             $table->text('law_enforcement_sent')->nullable();

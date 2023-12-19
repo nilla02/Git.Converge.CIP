@@ -274,6 +274,9 @@ export default function FileUpload({
                                         className="mt-1 block w-full"
                                         label="Accompanying dependents"
                                         name="Accompanying dependents"
+                                           disabled={
+                                    data.type_of_applicant === "1"||  data.type_of_applicant === "3"
+                                }
                                         value={data.Accompanying_dependents}
                                         onChange={(e) =>
                                             setData("Accompanying_dependents", e.target.value)
@@ -398,151 +401,9 @@ export default function FileUpload({
                     </div>
 
 
-                    <div className=" flex bg-cyan-700  to-[#405160] p-3 rounded">
-                                    <div className="flex-1 pt-2 pb-2">
-                                        <h1 className=" text-center text-2xl text-bold text-white">Passport and Visa Info</h1>
-                                    </div>
-                </div>
-
-                    {/* Passport and VISA information */}
-
-                    {/* Passport Number */}
-                    <div className=" mb-4">
-                            <InputLabel htmlFor="Passport Number" value="Passport Number" />
-                            <TextInput
-                                type="text"
-                                className="mt-1 block w-full"
-                                value={data.Passport_number}
-                                onChange={(e) =>
-                                    setData("Passport_number", e.target.value)
-                                }
-                            />
-                            <span className="text-red-600">
-                                {errors.Passport_number}
-                            </span>
-                        </div>
-
-                    {/* VISA Number */}
-                    <div className=" mb-4">
-                            <InputLabel htmlFor="Visa Number" value="Visa Number" />
-                            <TextInput
-                                type="text"
-                                className="mt-1 block w-full"
-                                value={data.visa_Number}
-                                onChange={(e) =>
-                                    setData("visa_Number", e.target.value)
-                                }
-                            />
-                            <span className="text-red-600">
-                                {errors.visa_Number}
-                            </span>
-                        </div>
-
-                     {/* //Visa Issue Date */}
-                     <div className="mb-4 ">
-                            <InputLabel
-                                htmlFor="Visa Issue Date"
-                                value="Visa Issue Date"
-                            />
-                            <div></div>
-
-                            <input
-                                type="date"
-                                className=" rounded mt-1 block w-full"
-                                value={data.visa_issue_date}
-                                onChange={(e) =>
-                                    setData("visa_issue_date", e.target.value)
-                                }
-                            />
-                        </div>
-
-                     {/* //Visa Expiration Date */}
-                     <div className="mb-4 ">
-                            <InputLabel
-                                htmlFor="Visa Expiration Date"
-                                value="Visa Expiration Date"
-                            />
-                            <div></div>
-
-                            <input
-                                type="date"
-                                className=" rounded mt-1 block w-full"
-                                value={data.visa_expiration_date}
-                                onChange={(e) =>
-                                    setData("visa_expiration_date", e.target.value)
-                                }
-                            />
-                        </div>
 
 
-                    {/* Region */}
-                    <div className="mb-4">
-                        <InputLabel
-                            htmlFor="Region"
-                            value="Region"
-                        />
-                        <select
-                            className="w-full rounded"
-                            value={data.Region}
-                            onChange={(e) =>
-                                setData("Region", e.target.value)
-                            }
-                        >
-                            <option value="">
-                                -Select Region-
-                            </option>
-                            {region.map((user) => (
-                                <option key={user.id} value={user.id}>
-                                    {user.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="text-red-600">{errors.Status}</span>
-                    </div>
-                    {/*Country of Residense */}
-                    <div className="mb-4">
-                        <InputLabel
-                            htmlFor="Visa Issue Country"
-                            value="Visa Issue Country"
-                        />
-                        <select
-                            className="w-full rounded"
-                            value={data.country_of_issue}
-                            onChange={(e) => setData("country_of_issue", e.target.value)}
-                        >
-                            <option value="">
-                                -Country of Issue-
-                            </option>
-                            {countries.map((user) => (
-                                <option key={user.id} value={user.code}>
-                                    {user.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="text-red-600">{errors.country_of_issue}</span>
-                    </div>
-                    {/*Country of Residense */}
-                    <div className="mb-4">
-                        <InputLabel
-                            htmlFor="country_of_birth"
-                            value="Birth Country"
-                        />
-                        <select
-                            className="w-full rounded"
-                            value={data.country_of_birth}
-                            onChange={(e) => setData("country_of_birth", e.target.value)}
-                        >
-                            <option value="">
-                                -Country of Birth-
-                            </option>
-                            {countries.map((user) => (
-                                <option key={user.id} value={user.code}>
-                                    {user.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="text-red-600">{errors.country_of_birth}</span>
-                    </div>
+
                 </div>
 
                 <div className="mt-4">
@@ -554,6 +415,13 @@ export default function FileUpload({
                         Save
                     </PrimaryButton>
 
+                    <PrimaryButton
+                        type="submit"
+                        className="px-6 mr-2 py-2 font-bold text-white bg-slate rounded"
+                        onClick={handleSubmit}
+                    >
+                        Add Dependant
+                    </PrimaryButton>
 
                 </div>
             </form>

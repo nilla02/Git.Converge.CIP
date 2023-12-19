@@ -24,7 +24,7 @@ export default function Authenticated({ user }) {
     }
     return (
         <div className="fixed w-[225px] h-screen bg-gradient-to-b from-cyan-600  to-[#405160] justify-center items-center gap-[5px] shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]">
-            <div className=" flex-col p-5 justify-start pt-20 items-start gap-[15px] inline-flex">
+            <div className=" flex-col p-5 justify-start pt-20 items-start gap-[2px] inline-flex">
                 {hasRole("agents") ||
                 hasRole("website_admin") ||
                 hasRole("super_administrators") ? (
