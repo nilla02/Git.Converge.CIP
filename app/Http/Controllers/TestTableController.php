@@ -1176,7 +1176,7 @@ $files[]=$file_name;
                     'applicantName' => $applicantName,
                     'applicationid'=>$applicationid,
                     'ref_number'=>$ref_number,
-'date'=>$date,
+                    'date'=>$date,
 
 
             ];
@@ -1243,5 +1243,6 @@ $files[]=$file_name;
      */
     public function destroy(string $id)
     {
+
     }
 }

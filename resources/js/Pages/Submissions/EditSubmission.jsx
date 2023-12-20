@@ -308,18 +308,6 @@ const fields = {
         field: "file",
         type: "text",
     },
-    file_path:{
-        roles: [
-
-"due_diligence_officer",
-            "website_admin",
-            "ceo",
-
-        ],
-        label: "Addition Files",
-        field: "xfile",
-        type: "text",
-    },
 
     sworn_affidavit_spouse_path: {
         roles: [
@@ -796,7 +784,12 @@ export default function EditSubmissions({
           e.target.value = null;
         }
       };
+      const handleFilesChange = (key, e) => {
+        const files = e.target.files;
+        setData(key, files);
 
+
+      };
 
     function displayfiles(value){
 
@@ -814,6 +807,18 @@ return value.map(x=>(
         }
         return ""
     }
+
+    const isFileAllowed = (file, userRole) => {
+        const allowedImageTypes = ["image/png", "image/jpeg"];
+        const allowedDocumentTypes = ["application/pdf", "application/msword", "application/vnd.ms-excel"];
+
+        if (userRole === "agent" || userRole === "promoter") {
+          return allowedImageTypes.includes(file.type) || allowedDocumentTypes.includes(file.type);
+        }
+
+        return allowedDocumentTypes.includes(file.type);
+      };
+
     const updatePassword = (e) => {
         e.preventDefault();
         const isConfirmed = window.confirm("Are you sure you want to save?");
@@ -1179,16 +1184,7 @@ return value.map(x=>(
 
                     }
                 };
-                const isFileAllowed = (file, userRole) => {
-                    const allowedImageTypes = ["image/png", "image/jpeg"];
-                    const allowedDocumentTypes = ["application/pdf", "application/msword", "application/vnd.ms-excel"];
 
-                    if (userRole === "agent" || userRole === "promoter") {
-                      return allowedImageTypes.includes(file.type) || allowedDocumentTypes.includes(file.type);
-                    }
-
-                    return allowedDocumentTypes.includes(file.type);
-                  };
 
                   const handleFileChange = (key, e) => {
                     const files = e.target.files;
@@ -1278,8 +1274,8 @@ return value.map(x=>(
             if (!val || val instanceof File) {
                 const handleDrop = (e) => {
                     e.preventDefault();
-                    const droppedFile = e.dataTransfer.files[0];
-                    handleFileChange(key, { target: { files: [droppedFile] } });
+                    const droppedFile = e.dataTransfer.files;
+                    handleFilesChange(key, { target: { files: droppedFile } });
                 };
 
                 return (
@@ -1323,7 +1319,7 @@ return value.map(x=>(
                                             className="hidden"
                                             name={key}
                                             onChange={(e) =>
-                                                handleFileChange(key, e)
+                                                handleFilesChange(key, e)
                                             }
                                         />
                                     </div>
@@ -1443,13 +1439,27 @@ return value.map(x=>(
                                             Save
                                         </PrimaryButton>
 
-                                        <PrimaryButton
-                                            type="submit"
-                                            disabled={processing}
-                                            onClick={updatehandleClick}
-                                        >
+                                        {data.status_id === 12 && (
+        <PrimaryButton
+            type="submit"
+            disabled={processing}
+            onClick={handleClick}
+        >
+            Save
+        </PrimaryButton>
+    )}
 
-                                        </PrimaryButton>
+
+
+{/* //download */}
+{auth.user.role_names.includes('due_diligence_officer') || auth.user.role_names.includes('website_admin') && (
+    <PrimaryButton type="button">
+        <a target="_blank" href={`/media/${submission.agency}/${submission.ref_number}/download`}>
+            Download
+        </a>
+    </PrimaryButton>
+)}
+
                                         <Transition
                                             show={recentlySuccessful}
                                             enterFrom="opacity-0"

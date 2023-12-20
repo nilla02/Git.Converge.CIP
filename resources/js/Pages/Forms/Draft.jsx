@@ -27,7 +27,7 @@ const usersPerPage = 5; // Adjust the number of users per page as needed
   };
     const handleSearch = (query) => {
         setSearchQuery(query);
-        setCurrentPage(0);
+        setCurrentPage(1);
     };
 
 
@@ -45,13 +45,20 @@ const usersPerPage = 5; // Adjust the number of users per page as needed
         setEditingProjectId(projectId);
     };
 
+
+
+    // useEffect(() => {
+
+    //     setFilteredUsers(users);
+    //   },[]);
+
+
     useEffect(() => {
         const filtered = users
           .filter((user) => {
             if (!selectedCriteria) {
-              return (
-                user.status_id == searchQuery
-              );
+              return user
+
             } else {
                 return user.status_id == selectedCriteria
             }
@@ -66,7 +73,7 @@ const usersPerPage = 5; // Adjust the number of users per page as needed
           .filter((user) => {
             if (!selectedCriterialaw) {
               // Return criteria based on law_enforcement_sent if no specific law criteria is selected
-              return user.law_enforcement_sent && user.law_enforcement_sent.toLowerCase().includes(searchQuery.toLowerCase());
+              return user
             } else {
               console.log('selectedCriterialaw:', selectedCriterialaw);
               console.log('searchQuery:', searchQuery);

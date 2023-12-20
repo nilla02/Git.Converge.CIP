@@ -122,11 +122,14 @@ Route::group(['middleware' => ['role:website_admin|role:super_administrators']],
     });
 
 });
+
+
+
+Route::get('media/{agency}/{folder}/download', [MediaController::class, 'download'])
+->middleware(['auth', 'verified']);
+
 Route::get('media/{file}', [MediaController::class, 'serve'])
 ->where(['file'=>'.*'])->middleware(['auth', 'verified']);
-
-
-
 
 
 require __DIR__ . '/auth.php';
