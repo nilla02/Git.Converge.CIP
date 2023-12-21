@@ -94,7 +94,7 @@ export default function AccDashboard({ auth, users, total,updated,user_id,notifi
                                     </div>
                                     <div className="flex-grow">
                                         <div className="text-gray-400 ">
-                                  Denied
+                         Active
                                         </div>
                                         <div className="text-2xl font-bold font text-gray-900">
                                         {denied}

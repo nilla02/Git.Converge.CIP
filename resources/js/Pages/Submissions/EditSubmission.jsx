@@ -11,6 +11,7 @@ import { Transition } from "@headlessui/react";
 import AuthenticatedLayoutAA from "@/Layouts/AuthenticatedLayoutAA";
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
 import Swal from "sweetalert2";
+
 import EditCubmissions from "./EditCommissions";
 
 const fields = {
@@ -436,7 +437,7 @@ const fields = {
             "promoter",
         ],
         label: "Visas",
-        field: "file",
+        field: "xfile",
         type: "text",
     },
 
@@ -1290,13 +1291,12 @@ return value.map(x=>(
                                 onDrop={handleDrop}
                                 onDragOver={(e) => e.preventDefault()}
                             >
-                                {val && val.type === "application/pdf" ? (
-                                    <embed
-                                        src={URL.createObjectURL(val)}
-                                        type="application/pdf"
-                                        width="100%"
-                                        height="500px"
-                                    />
+                      {val && val.length > 0 ? (
+                            <ul>
+                                {val.map((file, index) => (
+                                    <li key={index}>{file.name}</li>
+                                ))}
+                            </ul>
                                 ) : (
                                     <div
                                         className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer"
@@ -1336,14 +1336,28 @@ return value.map(x=>(
 
             return (
                 <div>
+
                     <InputLabel htmlFor={key} value={field.label} />
+
+
                     <ul>
+
                     {displayfiles(val)}
+
 
 </ul>
 
+                                             <button
+                        type="button"
+                        onClick={() => handleFileDelete(key)}
+                        className="text-red-500 hover:text-red-700"
+                    >
+                       clear
+                    </button>
+
 
                 </div>
+
             );
         }
     };

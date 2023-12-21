@@ -382,7 +382,22 @@ public function acc()
 
   protected function getVisasPathAttribute($value)
   {
-    return $this->generateFilePath($value);
+    {
+        $paths = [];
+
+        if ($value !== null && is_string($value)) {
+            $decoded = json_decode($value, true);
+
+
+            if (is_array($decoded)) {
+                foreach ($decoded as $key => $path) {
+                    $paths[] = $this->generateFilePath($path);
+                }
+            }
+        }
+
+        return  count($paths)>0? $paths: null ;
+    }
   }
 
   protected function getMedicalExaminerDeclarationPathAttribute($value)

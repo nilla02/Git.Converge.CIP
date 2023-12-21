@@ -2,10 +2,11 @@ import AuthenticatedLayoutAA from "@/Layouts/AuthenticatedLayoutAA";
 import Footer from "@/Components/Footer";
 import FileUpload from "@/Components/FileUpload";
 import Authenticated from "@/Layouts/AuthenticatedSidebar";
-
+import React, { useState, useEffect } from "react";
+import Modal from '@/Components/Modal';
 export default function Edit({
     auth,
-    users,
+   promoter,
     countries,
     principle_applicants,
     region,
@@ -15,6 +16,15 @@ export default function Edit({
     mstatus,
     notifications
 }) {
+    const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+
+    const openModal = () => {
+      setConfirmingUserDeletion(true);
+    };
+
+    const closeModal = () => {
+      setConfirmingUserDeletion(false);
+    };
     return (
         <AuthenticatedLayoutAA user={auth.user}
         notifications={notifications}>
@@ -39,7 +49,22 @@ export default function Edit({
                                 gender={gender}
                                 mstatus={mstatus}
                             />
+
                         </div>
+                        <button onClick={openModal}>Open File Upload Modal</button>
+
+      <Modal show={confirmingUserDeletion} onClose={closeModal}>
+        <FileUpload
+         promoter={promoter}
+          countries={countries}
+          principle_applicants={principle_applicants}
+          region={region}
+          toi={toi}
+          toa={toa}
+          gender={gender}
+          mstatus={mstatus}
+        />
+      </Modal>
                     </div>
                 </div>
             </div>

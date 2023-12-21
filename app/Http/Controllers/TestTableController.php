@@ -148,10 +148,28 @@ $query->where('created_at','<=',$date);
             // foreach ($users as $user) {
             //     $daysPassed[] = $user->day_passed; // Add each day_passed value to the array
             // }
+            $countries = Country::all();
+            $regions = Region::all();
+            $type_of_applicant = Applicant_Type::all();
+            $gender = Gender::all();
+            $mstatus = MaritualStatus::all();
+            $toi = Type_of_investment::all();
+
+            $promoter = User::whereHas('roles', function ($query) {
+                $query->where('name', 'promoter');
+            })->get();
+
+            $signedInUser = Auth::user();
+            $signedInUserGroup = $signedInUser->group;
+            $principle_applicants = TestTable::where('agency', $signedInUser->group)
+                ->where('type_of_applicant', '2')
+                ->pluck('id');
+            // Get an array of user_ids
 
             $notificationCount = auth()->user()->unreadNotifications->count();
         $notifications = auth()->user()->unreadNotifications;
-        return Inertia::render('Forms/Draft', ['users' => $users,  'roles' => $user,'days'=>$daysPassed ,'notifications'=>$notifications,"count"=> $notificationCount]);
+        return Inertia::render('Forms/Draft', ['users' => $users, 'promoter'=>$promoter, 'roles' => $user,'days'=>$daysPassed ,'notifications'=>$notifications,"count"=> $notificationCount, 'countries' => $countries, 'principle_applicants' => $principle_applicants,'region'=>$regions,'toa'=>$type_of_applicant
+        ,'gender'=>$gender,'mstatus'=>$mstatus,'toi'=>$toi,]);
     }
     public function webadmindb(){
 
@@ -159,7 +177,7 @@ $query->where('created_at','<=',$date);
 
         $users_roles = User::with('roles')->get();
 
-        // Filter users with the "accountant" role
+
         $accountantUsers = $users_roles->filter(function ($user) {
             return $user->hasRole('accountant');
         });
@@ -208,11 +226,10 @@ $query->where('created_at','<=',$date);
             return $user->hasRole('admin_due_diligence_officer');
         });
 
-        // Count the number of users with the "accountant" role
+        // Count the number of users with the  roles
         $accounts = $accountantUsers->count();
         $agents = $agentUsers->count();
         $ddo = $ddoUsers->count();
-        //new
         $ddoadmin = $ddoadminUsers->count();
         $pmo = $pmoUsers->count();
         $bdo = $bdoUsers->count();
@@ -229,6 +246,7 @@ $totalApplications=Testtable::count();
             $logs = Activity::orderBy('created_at', 'desc')->paginate(6);
 
 $totalusers = User::count();
+
         $roles = $user->getRoleNames()->toArray();
 
         $users = TestTable::query()
@@ -238,15 +256,35 @@ $totalusers = User::count();
         })
         ->get();
         $recentlyModified = TestTable::query()
-        ->orderBy('updated_at', 'desc') // Order by the 'updated_at' column in descending order
+        ->orderBy('updated_at', 'desc')
         ->when(in_array('agents', $roles), function ($query) use ($user) {
             $query->where('agent_id', $user->id);
         })
         ->get();
+
+        //draft
+
+$draft = TestTable::query()
+    ->where(function ($query) {
+        $query->where('status_id', 12)
+              ->orWhere('status_id', 13);
+    })
+    ->count();
+
+    $active = TestTable::query()
+    ->where(function ($query) {
+        $query->where('open_at',)
+              ->orWhere('status_id', 13);
+    })
+    ->whereNotNull('open_at')
+    ->count();
+
         $notifications = auth()->user()->unreadNotifications;
-        return inertia::render('WebAdminDb', ['users' => $users,'roles'=>$roles,'updated'=>$recentlyModified,'user_id'=>$user,'logs'=>$logs,'userall'=>$usersall,'accounts'=>$accounts,'risk'=>$risk,'agents'=>$agents,'ddo'=>$ddo,'ddoadmin'=>$ddoadmin,'pmo'=>$pmo,'bdo'=>$bdo,'bo'=>$bo,'sa'=>$sa,'ceo'=>$ceo,'cs'=>$cs,'mirf'=>$mirf,'promo'=>$promo,'totalusers'=>$totalusers,'totalapplicant'=>$totalApplications,'notifications'=>$notifications]);
+        return inertia::render('WebAdminDb', ['users' => $users,'active'=> $active,'draft'=>$draft,'roles'=>$roles,'updated'=>$recentlyModified,'user_id'=>$user,'logs'=>$logs,'userall'=>$usersall,'accounts'=>$accounts,'risk'=>$risk,'agents'=>$agents,'ddo'=>$ddo,'ddoadmin'=>$ddoadmin,'pmo'=>$pmo,'bdo'=>$bdo,'bo'=>$bo,'sa'=>$sa,'ceo'=>$ceo,'cs'=>$cs,'mirf'=>$mirf,'promo'=>$promo,'totalusers'=>$totalusers,'totalapplicant'=>$totalApplications,'notifications'=>$notifications]);
 
     }
+
+
     public function accountsdb(){
 
         $user = Auth::user();
@@ -262,7 +300,7 @@ $totalusers = User::count();
             ->get();
             $totalApplications = $users->count();
         $recentlyModified = TestTable::query()
-        ->orderBy('updated_at', 'desc') // Order by the 'updated_at' column in descending order
+        ->orderBy('updated_at', 'desc')
         ->when(in_array('agents', $roles), function ($query) use ($user) {
             $query->where('agent_id', $user->id);
         })
@@ -343,7 +381,7 @@ $notifications = auth()->user()->unreadNotifications;
 
         $user = Auth::user();
         $totalApplications = TestTable::where('agent_id', $user->id)->count();
-        $draft = TestTable::where('agent_id', $user->id)->where('status_id', 13)->count();
+        $draft = TestTable::where('agent_id', $user->id)->where('status_id', 13)->orwhere('status_id', 12)->count();
         $denied = TestTable::where('agent_id', $user->id)->where('status_id', 8)->count();
         $accept = TestTable::where('agent_id', $user->id)->where('status_id', 11)->count();
         $roles = $user->getRoleNames()->toArray();

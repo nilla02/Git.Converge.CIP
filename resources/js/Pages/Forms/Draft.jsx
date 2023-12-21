@@ -5,10 +5,18 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import { useState, useEffect } from "react";
 import Excel from "@/Components/JRCC";
 import ReactPaginate from 'react-paginate';
+import Modal from '@/Components/Modal';
+import FileUpload from "@/Components/FileUpload";
 
 
-
-export default function Edit({ auth, users, roles ,days,notifications,count}) {
+export default function Edit({ auth, users, roles ,days,notifications,count,   countries,
+    principle_applicants,
+    region,
+    toa,
+    toi,
+    gender,
+    mstatus,
+promoter,}) {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredUsers, setFilteredUsers] = useState([]);
@@ -17,7 +25,15 @@ export default function Edit({ auth, users, roles ,days,notifications,count}) {
     const [selectedCriterialaw, setSelectedCriterialaw] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
 const usersPerPage = 5; // Adjust the number of users per page as needed
+const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
 
+const openModal = () => {
+  setConfirmingUserDeletion(true);
+};
+
+const closeModal = () => {
+  setConfirmingUserDeletion(false);
+};
 
   // Function to handle page change
   const handlePageChange = ({ selected }) => {
@@ -533,6 +549,7 @@ Pending Review</option>
                                                         {user.last_name}
                                                     </td>
                                                 )}
+
                                                 {isColumnVisible("Status") && (
                                                     <td className="px-6 py-4">
                                                         <span
@@ -599,8 +616,32 @@ Pending Review</option>
 
                                                                 </a>
                                                             </div>
-                                                            <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                                            <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110"
+                                                                  >
+<div
+type="submit"
 
+onClick={openModal}>
+
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+  <title className="text-rose-500">Add Dependent</title>
+</svg>
+</div>
+
+                                                            <Modal show={confirmingUserDeletion} onClose={closeModal}>
+        <FileUpload
+          promoter={promoter}
+          countries={countries}
+          principle_applicants={principle_applicants}
+          region={region}
+          toi={toi}
+          toa={toa}
+          gender={gender}
+          mstatus={mstatus}
+        />
+      </Modal>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -694,7 +735,11 @@ Pending Review</option>
                                                         }
                                                     </td>
                                                 )}
+{isColumnVisible("ADD")&&(<td>
+    <Modal show={confirmingUserDeletion} onClose={closeModal}>
 
+      </Modal>
+</td>)}
                                             </tr>
                                         ))}
                                     </tbody>

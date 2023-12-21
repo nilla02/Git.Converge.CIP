@@ -22,17 +22,19 @@ export default function Dashboard({
     risk,
     ddoadmin,
     pmo,
+    draft,
     bdo,
     bo,
     sa,
     ceo,
+    active,
     cs,
     mirf,
     promo,
     totalapplicant,
     notifications
 }) {
-    console.log(agents);
+    console.log(draft);
 
 
     return (
@@ -138,10 +140,10 @@ export default function Dashboard({
                                         </div>
                                         <div className="flex-grow">
                                             <div className="text-gray-400 ">
-                                                Sick Users{" "}
+                                               Draft{" "}
                                             </div>
                                             <div className="text-2xl font-bold font text-gray-900">
-{0}
+{draft}
                                             </div>
                                         </div>
                                     </div>
@@ -169,10 +171,10 @@ export default function Dashboard({
                                     </div>
                                     <div className="flex-grow">
                                         <div className="text-gray-400 t">
-                                            Total Application{" "}
+                                           Active Applications{" "}
                                         </div>
                                         <div className="text-2xl font-bold font text-gray-900">
-{}
+{active}
                                         </div>
                                     </div>
                                 </div>
