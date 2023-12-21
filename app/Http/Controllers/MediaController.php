@@ -31,7 +31,7 @@ return response()->file($filepath);
             $filePath     = $file->getRealPath();
 
             // extracting filename with substr/strlen
-            $relativePath ="/" . substr($filePath, strlen($path) + 1);
+            $relativePath ="/" .$agency."/".$folder."/". substr($filePath, strlen($path) + 1);
 
             $zip->addFile($filePath, $relativePath);
         }

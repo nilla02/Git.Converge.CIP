@@ -1241,8 +1241,17 @@ return value.map(x=>(
                                             name={key}
                                             onChange={(e) => handleFileChange(key, e)}
                                         />
+
                                     </div>
+
                                 )}
+                                                        <button
+                        type="button"
+                        onClick={() => handleFileDelete(key)}
+                        className="text-red-500 hover:text-red-700"
+                    >
+                       clear
+                    </button>
                             </div>
                             <span className="text-red-600">{errors.File}</span>
                         </div>
@@ -1256,13 +1265,7 @@ return value.map(x=>(
                     <a className="ml-2 text-blue-500 rounded-sm" href={val} target="_blank" rel="noopener noreferrer">
                         View File
                     </a>{" "}
-                    <button
-                        type="button"
-                        onClick={() => handleFileDelete(key)}
-                        className="text-red-500 hover:text-red-700"
-                    >
-                        Delete
-                    </button>
+
                 </div>
             );
         }
@@ -1396,7 +1399,7 @@ return value.map(x=>(
                                     <td className="px-6 py-4">
                                     <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
                                                     <a
-                                                        href={`/dashboard/submissions/${user.id}/edit`}
+                                                        href={`/submissions/${user.id}/edit`}
                                                     >
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -1445,7 +1448,7 @@ return value.map(x=>(
             disabled={processing}
             onClick={handleClick}
         >
-            Save
+        Submit Application
         </PrimaryButton>
     )}
 
