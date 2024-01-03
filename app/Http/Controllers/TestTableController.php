@@ -430,7 +430,6 @@ $notifications = auth()->user()->unreadNotifications;
         // Get an array of user_ids
 
         // Now you have an array of user_ids who meet the criteria.
-
         $users = TestTable::all();
         $notifications = auth()->user()->unreadNotifications;
 
