@@ -206,6 +206,8 @@ promoter,
                                 onChange={handleDateChange}
                             />
                         </div>
+
+                        {/* //Type of applicant */}
                         <div className="mb-4 ">
                             <InputLabel
                                 htmlFor="Type of Applicant"

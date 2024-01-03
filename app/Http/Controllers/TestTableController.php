@@ -418,7 +418,7 @@ $notifications = auth()->user()->unreadNotifications;
         $mstatus = MaritualStatus::all();
         $toi = Type_of_investment::all();
 
-        $users = User::whereHas('roles', function ($query) {
+        $promoter = User::whereHas('roles', function ($query) {
             $query->where('name', 'promoter');
         })->get();
 
@@ -433,7 +433,7 @@ $notifications = auth()->user()->unreadNotifications;
 
         $notifications = auth()->user()->unreadNotifications;
 
-        return Inertia::render('Application', ['users' => $users, 'countries' => $countries, 'principle_applicants' => $principle_applicants,'region'=>$regions,'toa'=>$type_of_applicant
+        return Inertia::render('Application', ['promoter' => $promoter, 'countries' => $countries, 'principle_applicants' => $principle_applicants,'region'=>$regions,'toa'=>$type_of_applicant
     ,'gender'=>$gender,'mstatus'=>$mstatus,'toi'=>$toi,'notifications' => $notifications]);
         return response()->json(['message' => 'Role created successfully'], 201);
     }

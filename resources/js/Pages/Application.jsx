@@ -40,7 +40,7 @@ export default function Edit({
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="  relative overflow-x-auto p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <FileUpload
-                                users={users}
+                                promoter={promoter}
                                 countries={countries}
                                 principle_applicants={principle_applicants}
                                 region={region}
