@@ -431,6 +431,7 @@ $notifications = auth()->user()->unreadNotifications;
 
         // Now you have an array of user_ids who meet the criteria.
 
+        $users = TestTable::all();
         $notifications = auth()->user()->unreadNotifications;
 
         return Inertia::render('Application', ['promoter' => $promoter, 'countries' => $countries, 'principle_applicants' => $principle_applicants,'region'=>$regions,'toa'=>$type_of_applicant

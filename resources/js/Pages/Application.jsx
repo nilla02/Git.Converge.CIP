@@ -18,6 +18,7 @@ export default function Edit({
 }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
 
+    console.log(promoter);
     const openModal = () => {
       setConfirmingUserDeletion(true);
     };
